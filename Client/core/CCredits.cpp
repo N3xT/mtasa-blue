@@ -142,6 +142,7 @@ CCredits::CCredits(void)
         "JR10\n"
         "PhrozenByte\n"
         "AboShanab\n"
+        "N3xT\n"
         "\n";
     "\n";
 
