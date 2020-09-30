@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CCOMMANDFILE_H
-#define __CCOMMANDFILE_H
+#pragma once
 
 #include "stdio.h"
 class CConsole;
@@ -20,10 +19,10 @@ class CCommandFile
 {
 public:
     CCommandFile(const char* szFilename, CConsole& Console, CClient& Client);
-    ~CCommandFile(void);
+    ~CCommandFile();
 
-    bool IsValid(void) { return m_pFile != NULL; };
-    bool Run(void);
+    bool IsValid() { return m_pFile != NULL; };
+    bool Run();
 
 private:
     bool Parse(char* szLine);
@@ -38,5 +37,3 @@ private:
     FILE* m_pFile;
     bool  m_bEcho;
 };
-
-#endif

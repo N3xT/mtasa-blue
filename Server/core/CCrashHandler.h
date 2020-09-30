@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CCRASHHANDLER_H
-#define __CCRASHHANDLER_H
+#pragma once
 
 #include "CCrashHandlerAPI.h"
 
@@ -31,7 +30,7 @@ private:
     static long WINAPI HandleExceptionGlobal(_EXCEPTION_POINTERS* pException);
     static void        DumpMiniDump(_EXCEPTION_POINTERS* pException, CExceptionInformation* pExceptionInformation);
 
-    static void RunErrorTool(void);
+    static void RunErrorTool();
 
     #else
 
@@ -39,5 +38,3 @@ private:
 
     #endif
 };
-
-#endif

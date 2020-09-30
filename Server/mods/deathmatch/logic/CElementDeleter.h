@@ -9,18 +9,17 @@
  *
  *****************************************************************************/
 
-#ifndef __CELEMENTDELETER_H
-#define __CELEMENTDELETER_H
+#pragma once
 
 #include <list>
 
 class CElementDeleter
 {
 public:
-    ~CElementDeleter(void) { DoDeleteAll(); };
+    ~CElementDeleter() { DoDeleteAll(); };
 
     void Delete(class CElement* pElement, bool bUnlink = true, bool bUpdatePerPlayerEntities = true);
-    void DoDeleteAll(void);
+    void DoDeleteAll();
 
     bool IsBeingDeleted(class CElement* pElement);
     void Unreference(CElement* pElement);
@@ -30,5 +29,3 @@ public:
 private:
     CElementListType m_List;
 };
-
-#endif

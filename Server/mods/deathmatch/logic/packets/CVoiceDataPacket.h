@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CVOICEDATAPACKET_H
-#define __PACKETS_CVOICEDATAPACKET_H
+#pragma once
 
 #include "CPacket.h"
 
@@ -18,12 +17,12 @@ class CVoiceDataPacket : public CPacket
 {
 public:
     CVoiceDataPacket(CPlayer* pPlayer, const unsigned char* pbSrcBuffer, unsigned short usLength);
-    CVoiceDataPacket(void);
+    CVoiceDataPacket();
     ~CVoiceDataPacket();
 
-    ePacketID               GetPacketID(void) const { return PACKET_ID_VOICE_DATA; }
-    unsigned long           GetFlags(void) const { return PACKET_LOW_PRIORITY | PACKET_SEQUENCED; };
-    virtual ePacketOrdering GetPacketOrdering(void) const { return PACKET_ORDERING_VOICE; }
+    ePacketID               GetPacketID() const { return PACKET_ID_VOICE_DATA; }
+    unsigned long           GetFlags() const { return PACKET_LOW_PRIORITY | PACKET_SEQUENCED; };
+    virtual ePacketOrdering GetPacketOrdering() const { return PACKET_ORDERING_VOICE; }
 
     bool Read(NetBitStreamInterface& BitStream);
     bool Write(NetBitStreamInterface& BitStream) const;
@@ -41,5 +40,3 @@ private:
     unsigned short m_usDataBufferSize;
     unsigned short m_usActualDataLength;
 };
-
-#endif

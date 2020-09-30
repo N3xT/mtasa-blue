@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CENTITYREMOVEPACKET_H
-#define __PACKETS_CENTITYREMOVEPACKET_H
+#pragma once
 
 #include "CPacket.h"
 #include <vector>
@@ -18,16 +17,14 @@
 class CEntityRemovePacket : public CPacket
 {
 public:
-    ePacketID     GetPacketID(void) const { return PACKET_ID_ENTITY_REMOVE; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_ENTITY_REMOVE; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Write(NetBitStreamInterface& BitStream) const;
 
     void Add(class CElement* pElement) { m_List.push_back(pElement); };
-    void Clear(void) { m_List.clear(); };
+    void Clear() { m_List.clear(); };
 
 private:
     std::vector<class CElement*> m_List;
 };
-
-#endif

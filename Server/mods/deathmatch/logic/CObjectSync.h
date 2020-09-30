@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __COBJECTSYNC_H
-#define __COBJECTSYNC_H
+#pragma once
 
 #ifdef WITH_OBJECT_SYNC
 
@@ -23,13 +22,13 @@ class CObjectSync
 public:
     CObjectSync(CPlayerManager* pPlayerManager, CObjectManager* pObjectManager);
 
-    void DoPulse(void);
+    void DoPulse();
     bool ProcessPacket(CPacket& Packet);
 
     void OverrideSyncer(CObject* pObject, CPlayer* pPlayer);
 
 private:
-    void     Update(void);
+    void     Update();
     void     UpdateObject(CObject* pObject);
     void     FindSyncer(CObject* pObject);
     CPlayer* FindPlayerCloseToObject(CObject* pObject, float fMaxDistance);
@@ -44,7 +43,5 @@ private:
 
     CElapsedTime m_UpdateTimer;
 };
-
-#endif
 
 #endif

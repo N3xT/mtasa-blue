@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CGAMESA_TASKATTACK
-#define __CGAMESA_TASKATTACK
+#pragma once
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -83,18 +82,18 @@ public:
 
     AnimationId            m_nRequiredAnim;
     AssocGroupId           m_nRequiredAnimGroup;
-    CAnimBlendAssociation *m_pAnim;
-    CWeaponInfo *          m_pWeaponInfo;
+    CAnimBlendAssociation* m_pAnim;
+    CWeaponInfo*           m_pWeaponInfo;
 
-    CEntity *m_pTargetEntity;
+    CEntity* m_pTargetEntity;
     CVector  m_vecCoords;
 };
 
 class CTaskSimpleGangDriveBySA : public virtual CTaskSimpleSA, public virtual CTaskSimpleGangDriveBy
 {
 public:
-    CTaskSimpleGangDriveBySA(void){};
-    CTaskSimpleGangDriveBySA(CEntity *pTargetEntity, const CVector *pVecTarget, float fAbortRange, char FrequencyPercentage, char nDrivebyStyle, bool bSeatRHS);
+    CTaskSimpleGangDriveBySA(){};
+    CTaskSimpleGangDriveBySA(CEntity* pTargetEntity, const CVector* pVecTarget, float fAbortRange, char FrequencyPercentage, char nDrivebyStyle, bool bSeatRHS);
 };
 
 class CTaskSimpleUseGunSAInterface : public CTaskSimpleSAInterface
@@ -112,12 +111,12 @@ public:
     char      m_nLastCommand;            // active command       (2 or 3) == is firing
     CVector2D m_vecMoveCommand;
 
-    CEntity *m_pTargetEntity;
+    CEntity* m_pTargetEntity;
     CVector  m_vecCoords;
 
-    CAnimBlendAssociation *m_pAnim;
+    CAnimBlendAssociation* m_pAnim;
 
-    CWeaponInfo *m_pWeaponInfo;             // 0x30
+    CWeaponInfo* m_pWeaponInfo;             // 0x30
     short        m_nBurstLength;            // 0x34
     short        m_nBurstShots;
 
@@ -131,34 +130,34 @@ public:
 class CTaskSimpleUseGunSA : public virtual CTaskSimpleSA, public virtual CTaskSimpleUseGun
 {
 public:
-    CTaskSimpleUseGunSA(void){};
-    CTaskSimpleUseGunSA(CEntity *pTargetEntity, CVector vecTarget, char nCommand, short nBurstLength = 1, unsigned char bAimImmediate = false);
+    CTaskSimpleUseGunSA(){};
+    CTaskSimpleUseGunSA(CEntity* pTargetEntity, CVector vecTarget, char nCommand, short nBurstLength = 1, unsigned char bAimImmediate = false);
 
-    bool ControlGun(CPed *pPed, CEntity *pTargetEntity, char nCommand);
-    bool ControlGunMove(CVector2D *pMoveVec);
-    void Reset(CPed *pPed, CEntity *pTargetEntity, CVector vecTarget, char nCommand, short nBurstLength = 1);
+    bool ControlGun(CPed* pPed, CEntity* pTargetEntity, char nCommand);
+    bool ControlGunMove(CVector2D* pMoveVec);
+    void Reset(CPed* pPed, CEntity* pTargetEntity, CVector vecTarget, char nCommand, short nBurstLength = 1);
 
-    int         GetTaskType(void);
-    bool        MakeAbortable(CPed *pPed, const int iPriority, const CEvent *pEvent);
-    bool        ProcessPed(CPed *pPed);
-    bool        SetPedPosition(CPed *pPed);
-    void        FireGun(CPed *pPed, bool bFlag);
-    void        AbortIK(CPed *pPed);
-    void        AimGun(CPed *pPed);
-    void        ClearAnim(CPed *pPed);
-    signed char GetCurrentCommand(void);
-    bool        GetDoneFiring(void);
-    bool        GetIsFinished(void);
-    bool        IsLineOfSightBlocked(void);
-    bool        GetIsFiring(void);
-    bool        GetIsReloading(void);
-    bool        GetSkipAim(void);
-    bool        PlayerPassiveControlGun(void);
-    void        RemoveStanceAnims(CPed *pPed, float);
-    static bool RequirePistolWhip(CPed *pPed, CEntity *);
+    int         GetTaskType();
+    bool        MakeAbortable(CPed* pPed, const int iPriority, const CEvent* pEvent);
+    bool        ProcessPed(CPed* pPed);
+    bool        SetPedPosition(CPed* pPed);
+    void        FireGun(CPed* pPed, bool bFlag);
+    void        AbortIK(CPed* pPed);
+    void        AimGun(CPed* pPed);
+    void        ClearAnim(CPed* pPed);
+    signed char GetCurrentCommand();
+    bool        GetDoneFiring();
+    bool        GetIsFinished();
+    bool        IsLineOfSightBlocked();
+    bool        GetIsFiring();
+    bool        GetIsReloading();
+    bool        GetSkipAim();
+    bool        PlayerPassiveControlGun();
+    void        RemoveStanceAnims(CPed* pPed, float);
+    static bool RequirePistolWhip(CPed* pPed, CEntity*);
     void        SetBurstLength(short);
-    void        SetMoveAnim(CPed *pPed);
-    void        StartAnim(CPed *pPed);
+    void        SetMoveAnim(CPed* pPed);
+    void        StartAnim(CPed* pPed);
     void        StartCountDown(unsigned char, bool);
 };
 
@@ -176,9 +175,9 @@ public:
     char           m_nContinueStrike;
     char           m_nChainCounter;
 
-    CEntity *              m_pTargetEntity;
-    CAnimBlendAssociation *m_pAnim;
-    CAnimBlendAssociation *m_pIdleAnim;
+    CEntity*               m_pTargetEntity;
+    CAnimBlendAssociation* m_pAnim;
+    CAnimBlendAssociation* m_pIdleAnim;
 
     char m_nComboSet;
     char m_nCurrentMove;
@@ -189,8 +188,6 @@ public:
 class CTaskSimpleFightSA : public virtual CTaskSimpleSA, public virtual CTaskSimpleFight
 {
 public:
-    CTaskSimpleFightSA(void){};
-    CTaskSimpleFightSA(CEntity *pTargetEntity, int nCommand, unsigned int nIdlePeriod = 10000);
+    CTaskSimpleFightSA(){};
+    CTaskSimpleFightSA(CEntity* pTargetEntity, int nCommand, unsigned int nIdlePeriod = 10000);
 };
-
-#endif

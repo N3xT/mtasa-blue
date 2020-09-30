@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CPEDSYNC_H
-#define __CPEDSYNC_H
+#pragma once
 
 #include "CPlayerManager.h"
 #include "CPedManager.h"
@@ -21,13 +20,13 @@ class CPedSync
 public:
     CPedSync(CPlayerManager* pPlayerManager, CPedManager* pPedManager);
 
-    void DoPulse(void);
+    void DoPulse();
     bool ProcessPacket(CPacket& Packet);
 
     void OverrideSyncer(CPed* pPed, CPlayer* pPlayer);
 
 private:
-    void     Update(void);
+    void     Update();
     void     UpdatePed(CPed* pPed);
     void     FindSyncer(CPed* pPed);
     CPlayer* FindPlayerCloseToPed(CPed* pPed, float fMaxDistance);
@@ -42,5 +41,3 @@ private:
 
     CElapsedTime m_UpdateTimer;
 };
-
-#endif

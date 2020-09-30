@@ -15,13 +15,13 @@
  * Gets the Player Ped for the local player
  * @return CPlayerPed * for the local player
  */
-CPlayerPed *CPlayerInfoSA::GetPlayerPed()
+CPlayerPed* CPlayerInfoSA::GetPlayerPed()
 {
     DEBUG_TRACE("CPlayerPed * CPlayerInfoSA::GetPlayerPed (  )");
-    return (CPlayerPed *)VAR_PlayerPed;
+    return (CPlayerPed*)VAR_PlayerPed;
 }
 
-CWanted *CPlayerInfoSA::GetWanted()
+CWanted* CPlayerInfoSA::GetWanted()
 {
     DEBUG_TRACE("CWanted * CPlayerInfoSA::GetWanted ( )");
 
@@ -31,7 +31,7 @@ CWanted *CPlayerInfoSA::GetWanted()
     return wanted;
 }
 
-void CPlayerInfoSA::GetCrossHair(bool &bActivated, float &fTargetX, float &fTargetY)
+void CPlayerInfoSA::GetCrossHair(bool& bActivated, float& fTargetX, float& fTargetY)
 {
     DEBUG_TRACE("void CPlayerInfoSA::GetCrossHair ( bool &bEnabled, float &fTargetX, float &fTargetY )");
     bActivated = internalInterface->CrossHair.bActivated;
@@ -47,7 +47,7 @@ long CPlayerInfoSA::GetPlayerMoney()
 {
     DEBUG_TRACE("unsigned long CPlayerInfoSA::GetPlayerMoney ( void )");
     // return internalInterface->DisplayScore;
-    return *(long *)(0xB7CE50);
+    return *(long*)(0xB7CE50);
 }
 
 /**
@@ -66,7 +66,7 @@ void CPlayerInfoSA::SetPlayerMoney(long lMoney, bool bInstant)
 /**
  *
  */
-VOID CPlayerInfoSA::GivePlayerParachute(VOID)
+VOID CPlayerInfoSA::GivePlayerParachute()
 {
     DEBUG_TRACE("VOID CPlayerInfoSA::GivePlayerParachute ( VOID )");
     DWORD dwFunction = FUNC_GivePlayerParachute;
@@ -111,7 +111,7 @@ VOID CPlayerInfoSA::MakePlayerSafe(BOOL boolSafe)
  * @param vehicle The vehicle you want to stop them entering
  * \todo Find out what this really does...
  */
-VOID CPlayerInfoSA::CancelPlayerEnteringCars(CVehicle *vehicle)
+VOID CPlayerInfoSA::CancelPlayerEnteringCars(CVehicle* vehicle)
 {
     DEBUG_TRACE("VOID CPlayerInfoSA::CancelPlayerEnteringCars ( CVehicle * vehicle )");
     DWORD dwFunction = FUNC_CancelPlayerEnteringCars;
@@ -157,7 +157,7 @@ VOID CPlayerInfoSA::KillPlayer()
  * @param vehicletype This is the type of vehicle to create
  * @return CVehicle * for the created remote controlled vehicle
  */
-CVehicle *CPlayerInfoSA::GivePlayerRemoteControlledCar(eVehicleTypes vehicletype)
+CVehicle* CPlayerInfoSA::GivePlayerRemoteControlledCar(eVehicleTypes vehicletype)
 {
     DEBUG_TRACE("CVehicle * CPlayerInfoSA::GivePlayerRemoteControlledCar ( eVehicleTypes vehicletype )");
     /**
@@ -201,18 +201,18 @@ VOID CPlayerInfoSA::TakeRemoteControlledCarFromPlayer()
  * Get the car that the player is controlling remotely
  * @return CVehicle * containing the relevant vehicle, or NULL if the player isn't controlling a vehicle
  */
-CVehicle *CPlayerInfoSA::GetPlayerRemoteControlledCar()
+CVehicle* CPlayerInfoSA::GetPlayerRemoteControlledCar()
 {
     DEBUG_TRACE("CVehicle * CPlayerInfoSA::GetPlayerRemoteControlledCar (  )");
-    return (CVehicle *)VAR_PlayerRCCar;
+    return (CVehicle*)VAR_PlayerRCCar;
 }
 
-float CPlayerInfoSA::GetFPSMoveHeading(void)
+float CPlayerInfoSA::GetFPSMoveHeading()
 {
     return this->GetInterface()->PlayerPedData.m_fFPSMoveHeading;
 }
 
-bool CPlayerInfoSA::GetDoesNotGetTired(void)
+bool CPlayerInfoSA::GetDoesNotGetTired()
 {
     return internalInterface->DoesNotGetTired;
 }
@@ -222,7 +222,7 @@ void CPlayerInfoSA::SetDoesNotGetTired(bool bDoesNotGetTired)
     internalInterface->DoesNotGetTired = bDoesNotGetTired;
 }
 
-short CPlayerInfoSA::GetLastTimeEaten(void)
+short CPlayerInfoSA::GetLastTimeEaten()
 {
     return internalInterface->TimeLastEaten;
 }
@@ -232,7 +232,7 @@ void CPlayerInfoSA::SetLastTimeEaten(short sTime)
     internalInterface->TimeLastEaten = sTime;
 }
 
-DWORD CPlayerInfoSA::GetLastTimeBigGunFired(void)
+DWORD CPlayerInfoSA::GetLastTimeBigGunFired()
 {
     return internalInterface->LastTimeBigGunFired;
 }

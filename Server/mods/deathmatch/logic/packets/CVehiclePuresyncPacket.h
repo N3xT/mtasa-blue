@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CVEHICLEPURESYNCPACKET_H
-#define __PACKETS_CVEHICLEPURESYNCPACKET_H
+#pragma once
 
 #include "CCommon.h"
 #include "CPacket.h"
@@ -21,12 +20,12 @@ class CVehicle;
 class CVehiclePuresyncPacket : public CPacket
 {
 public:
-    CVehiclePuresyncPacket(void){};
+    CVehiclePuresyncPacket(){};
     explicit CVehiclePuresyncPacket(class CPlayer* pPlayer) { m_pSourceElement = pPlayer; };
 
-    bool          HasSimHandler(void) const { return true; }
-    ePacketID     GetPacketID(void) const { return PACKET_ID_PLAYER_VEHICLE_PURESYNC; };
-    unsigned long GetFlags(void) const { return PACKET_MEDIUM_PRIORITY | PACKET_SEQUENCED; };
+    bool          HasSimHandler() const { return true; }
+    ePacketID     GetPacketID() const { return PACKET_ID_PLAYER_VEHICLE_PURESYNC; };
+    unsigned long GetFlags() const { return PACKET_MEDIUM_PRIORITY | PACKET_SEQUENCED; };
 
     bool Read(NetBitStreamInterface& BitStream);
     bool Write(NetBitStreamInterface& BitStream) const;
@@ -35,5 +34,3 @@ private:
     void ReadVehicleSpecific(class CVehicle* pVehicle, NetBitStreamInterface& BitStream, int iRemoteModel);
     void WriteVehicleSpecific(class CVehicle* pVehicle, NetBitStreamInterface& BitStream) const;
 };
-
-#endif

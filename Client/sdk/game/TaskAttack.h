@@ -9,15 +9,14 @@
  *
  *****************************************************************************/
 
-#ifndef __CGAME_TASKATTACK
-#define __CGAME_TASKATTACK
+#pragma once
 
 #include "Task.h"
 
 class CTaskSimpleGangDriveBy : public virtual CTaskSimple
 {
 public:
-    virtual ~CTaskSimpleGangDriveBy(void){};
+    virtual ~CTaskSimpleGangDriveBy(){};
 };
 
 enum eGunCommand
@@ -37,17 +36,15 @@ class CVector2D;
 class CTaskSimpleUseGun : public virtual CTaskSimple
 {
 public:
-    virtual ~CTaskSimpleUseGun(void){};
+    virtual ~CTaskSimpleUseGun(){};
 
-    virtual bool ControlGun(CPed *pPed, CEntity *pTargetEntity, char nCommand) = 0;
-    virtual bool ControlGunMove(CVector2D *pMoveVec) = 0;
-    virtual void Reset(CPed *pPed, CEntity *pTargetEntity, CVector vecTarget, char nCommand, short nBurstLength = 1) = 0;
+    virtual bool ControlGun(CPed* pPed, CEntity* pTargetEntity, char nCommand) = 0;
+    virtual bool ControlGunMove(CVector2D* pMoveVec) = 0;
+    virtual void Reset(CPed* pPed, CEntity* pTargetEntity, CVector vecTarget, char nCommand, short nBurstLength = 1) = 0;
 };
 
 class CTaskSimpleFight : public virtual CTaskSimple
 {
 public:
-    virtual ~CTaskSimpleFight(void){};
+    virtual ~CTaskSimpleFight(){};
 };
-
-#endif

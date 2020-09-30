@@ -22,16 +22,16 @@ class CSimPlayer
 {
 public:
     ZERO_ON_NEW
-    CSimPlayer(void) { DEBUG_CREATE_COUNT("CSimPlayer"); }
-    ~CSimPlayer(void) { DEBUG_DESTROY_COUNT("CSimPlayer"); }
+    CSimPlayer() { DEBUG_CREATE_COUNT("CSimPlayer"); }
+    ~CSimPlayer() { DEBUG_DESTROY_COUNT("CSimPlayer"); }
 
-    bool                                      IsJoined(void) { return m_iStatus == STATUS_JOINED; };
-    const std::multimap<ushort, CSimPlayer*>& GetPuresyncSendList(void);
-    unsigned short                            GetBitStreamVersion(void) { return m_usBitStreamVersion; };
-    NetServerPlayerID&                        GetSocket(void) { return m_PlayerSocket; };
+    bool                                      IsJoined() { return m_bIsJoined; };
+    const std::multimap<ushort, CSimPlayer*>& GetPuresyncSendList();
+    unsigned short                            GetBitStreamVersion() { return m_usBitStreamVersion; };
+    NetServerPlayerID&                        GetSocket() { return m_PlayerSocket; };
 
     // General synced vars
-    int                                m_iStatus;
+    bool                               m_bIsJoined;
     unsigned short                     m_usBitStreamVersion;
     NetServerPlayerID                  m_PlayerSocket;
     std::vector<CSimPlayer*>           m_PuresyncSendListFlat;

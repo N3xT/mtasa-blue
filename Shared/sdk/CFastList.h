@@ -45,18 +45,18 @@ public:
     struct SSuspendedOperation
     {
         EOperation operation;
-        T item;
+        T          item;
     };
 
-    uint     uiRevision;                  // Incremented every time the ordered map changes
-    uint     uiNextFrontIndex;            // Next (decrementing) index to use as a map key for items added to the front
-    uint     uiNextBackIndex;             // Next (incrementing) index to use as a map key for items added to the back
-    MapType  orderedMap;                  // Ordered map of items
-    InfoType infoMap;                     // info for each item
-    bool     m_bSuspendingModifyOperations;
+    uint                             uiRevision;                  // Incremented every time the ordered map changes
+    uint                             uiNextFrontIndex;            // Next (decrementing) index to use as a map key for items added to the front
+    uint                             uiNextBackIndex;             // Next (incrementing) index to use as a map key for items added to the back
+    MapType                          orderedMap;                  // Ordered map of items
+    InfoType                         infoMap;                     // info for each item
+    bool                             m_bSuspendingModifyOperations;
     std::vector<SSuspendedOperation> m_SuspendedOperationList;
 
-    CFastList(void) : uiRevision(1), uiNextFrontIndex(UINT_MAX / 2 - 1), uiNextBackIndex(UINT_MAX / 2), m_bSuspendingModifyOperations(false)
+    CFastList() : uiRevision(1), uiNextFrontIndex(UINT_MAX / 2 - 1), uiNextBackIndex(UINT_MAX / 2), m_bSuspendingModifyOperations(false)
     {
         #ifdef MTA_DEBUG
         // T must be a pointer
@@ -65,9 +65,9 @@ public:
         #endif
     }
 
-    const T& front(void) const { return orderedMap.begin()->second; }
+    const T& front() const { return orderedMap.begin()->second; }
 
-    void pop_front(void)
+    void pop_front()
     {
         dassert(!m_bSuspendingModifyOperations);
         T item = front();
@@ -112,11 +112,11 @@ public:
 
     bool contains(const T& item) const { return (infoMap.find(item) != infoMap.end()); }
 
-    size_t size(void) const { return orderedMap.size(); }
+    size_t size() const { return orderedMap.size(); }
 
-    bool empty(void) const { return orderedMap.empty(); }
+    bool empty() const { return orderedMap.empty(); }
 
-    void clear(void)
+    void clear()
     {
         dassert(!m_bSuspendingModifyOperations);
         orderedMap.clear();
@@ -144,17 +144,17 @@ public:
         }
     }
 
-    uint GetRevision(void) const { return uiRevision; }
+    uint GetRevision() const { return uiRevision; }
 
     // Queue remove/push_back/push_front operations until ResumeModifyOperations is called
-    void SuspendModifyOperations(void)
+    void SuspendModifyOperations()
     {
         dassert(!m_bSuspendingModifyOperations);
         m_bSuspendingModifyOperations = true;
     }
 
     // Replay queued operations
-    void ResumeModifyOperations(void)
+    void ResumeModifyOperations()
     {
         dassert(m_bSuspendingModifyOperations);
         m_bSuspendingModifyOperations = false;
@@ -162,11 +162,9 @@ public:
         {
             if (suspendedOperation.operation == EOperation::PushBack)
                 push_back(suspendedOperation.item);
-            else
-            if (suspendedOperation.operation == EOperation::PushFront)
+            else if (suspendedOperation.operation == EOperation::PushFront)
                 push_front(suspendedOperation.item);
-            else
-            if (suspendedOperation.operation == EOperation::Remove)
+            else if (suspendedOperation.operation == EOperation::Remove)
                 remove(suspendedOperation.item);
         }
         m_SuspendedOperationList.clear();
@@ -174,7 +172,7 @@ public:
 
 protected:
     // Reset indexing
-    void Reindex(void)
+    void Reindex()
     {
         uiNextFrontIndex = UINT_MAX / 2 - 1;
         uiNextBackIndex = UINT_MAX / 2;
@@ -227,9 +225,9 @@ public:
         ConstIterator(typename MapType::const_iterator initer) : iter(initer) {}
         bool     operator==(const ConstIterator& other) const { return iter == other.iter; }
         bool     operator!=(const ConstIterator& other) const { return iter != other.iter; }
-        void     operator++(void) { ++iter; }
+        void     operator++() { ++iter; }
         void     operator++(int) { iter++; }
-        const T& operator*(void)const { return iter->second; }
+        const T& operator*()const { return iter->second; }
     };
 
     class Iterator
@@ -240,10 +238,10 @@ public:
         Iterator(typename MapType::iterator initer) : iter(initer) {}
         bool     operator==(const Iterator& other) const { return iter == other.iter; }
         bool     operator!=(const Iterator& other) const { return iter != other.iter; }
-        void     operator++(void) { ++iter; }
+        void     operator++() { ++iter; }
         void     operator++(int) { iter++; }
-        const T& operator*(void)const { return iter->second; }
-                 operator ConstIterator(void) const { return ConstIterator(iter); }
+        const T& operator*()const { return iter->second; }
+                 operator ConstIterator() const { return ConstIterator(iter); }
     };
 
     //
@@ -257,9 +255,9 @@ public:
         ConstReverseIterator(typename MapType::const_reverse_iterator initer) : iter(initer) {}
         bool     operator==(const ConstReverseIterator& other) const { return iter == other.iter; }
         bool     operator!=(const ConstReverseIterator& other) const { return iter != other.iter; }
-        void     operator++(void) { ++iter; }
+        void     operator++() { ++iter; }
         void     operator++(int) { iter++; }
-        const T& operator*(void)const { return iter->second; }
+        const T& operator*()const { return iter->second; }
     };
 
     class ReverseIterator
@@ -270,21 +268,21 @@ public:
         ReverseIterator(typename MapType::reverse_iterator initer) : iter(initer) {}
         bool     operator==(const ReverseIterator& other) const { return iter == other.iter; }
         bool     operator!=(const ReverseIterator& other) const { return iter != other.iter; }
-        void     operator++(void) { ++iter; }
+        void     operator++() { ++iter; }
         void     operator++(int) { iter++; }
-        const T& operator*(void)const { return iter->second; }
-                 operator ConstReverseIterator(void) const { return ConstReverseIterator(iter); }
+        const T& operator*()const { return iter->second; }
+                 operator ConstReverseIterator() const { return ConstReverseIterator(iter); }
     };
 
-    ConstIterator begin(void) const { return ConstIterator(orderedMap.begin()); }
-    ConstIterator end(void) const { return ConstIterator(orderedMap.end()); }
-    Iterator      begin(void) { return Iterator(orderedMap.begin()); }
-    Iterator      end(void) { return Iterator(orderedMap.end()); }
+    ConstIterator begin() const { return ConstIterator(orderedMap.begin()); }
+    ConstIterator end() const { return ConstIterator(orderedMap.end()); }
+    Iterator      begin() { return Iterator(orderedMap.begin()); }
+    Iterator      end() { return Iterator(orderedMap.end()); }
 
-    ConstReverseIterator rbegin(void) const { return ConstReverseIterator(orderedMap.rbegin()); }
-    ConstReverseIterator rend(void) const { return ConstReverseIterator(orderedMap.rend()); }
-    ReverseIterator      rbegin(void) { return ReverseIterator(orderedMap.rbegin()); }
-    ReverseIterator      rend(void) { return ReverseIterator(orderedMap.rend()); }
+    ConstReverseIterator rbegin() const { return ConstReverseIterator(orderedMap.rbegin()); }
+    ConstReverseIterator rend() const { return ConstReverseIterator(orderedMap.rend()); }
+    ReverseIterator      rbegin() { return ReverseIterator(orderedMap.rbegin()); }
+    ReverseIterator      rend() { return ReverseIterator(orderedMap.rend()); }
 
     // Allow use of std iterator names
     typedef Iterator             iterator;

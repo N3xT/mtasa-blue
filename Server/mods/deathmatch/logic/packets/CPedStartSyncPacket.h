@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CPEDSTARTSYNCPACKET_H
-#define __PACKETS_CPEDSTARTSYNCPACKET_H
+#pragma once
 
 #include "CPacket.h"
 class CPed;
@@ -20,13 +19,11 @@ class CPedStartSyncPacket : public CPacket
 public:
     CPedStartSyncPacket(CPed* pPed) { m_pPed = pPed; };
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_PED_STARTSYNC; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_PED_STARTSYNC; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Write(NetBitStreamInterface& BitStream) const;
 
 private:
     CPed* m_pPed;
 };
-
-#endif

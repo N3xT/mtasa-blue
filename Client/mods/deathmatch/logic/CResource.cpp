@@ -21,7 +21,7 @@ extern CClientGame* g_pClientGame;
 int CResource::m_iShowingCursor = 0;
 
 CResource::CResource(unsigned short usNetID, const char* szResourceName, CClientEntity* pResourceEntity, CClientEntity* pResourceDynamicEntity,
-                     const SString& strMinServerReq, const SString& strMinClientReq, bool bEnableOOP)
+                     const CMtaVersion& strMinServerReq, const CMtaVersion& strMinClientReq, bool bEnableOOP)
 {
     m_uiScriptID = CIdArray::PopUniqueId(this, EIdClass::RESOURCE);
     m_usNetID = usNetID;
@@ -63,6 +63,11 @@ CResource::CResource(unsigned short usNetID, const char* szResourceName, CClient
     m_pResourceTXDRoot = new CClientDummy(g_pClientGame->GetManager(), INVALID_ELEMENT_ID, "txdroot");
     m_pResourceTXDRoot->MakeSystemEntity();
 
+    // Create our IFP root element. We set its parent when we're loaded.
+    // Make it a system entity so nothing but us can delete it.
+    m_pResourceIFPRoot = new CClientDummy(g_pClientGame->GetManager(), INVALID_ELEMENT_ID, "ifproot");
+    m_pResourceIFPRoot->MakeSystemEntity();
+
     m_strResourceDirectoryPath = SString("%s/resources/%s", g_pClientGame->GetFileCacheRoot(), *m_strResourceName);
     m_strResourcePrivateDirectoryPath = PathJoin(CServerIdManager::GetSingleton()->GetConnectionPrivateDirectory(), m_strResourceName);
 
@@ -81,7 +86,7 @@ CResource::CResource(unsigned short usNetID, const char* szResourceName, CClient
     }
 }
 
-CResource::~CResource(void)
+CResource::~CResource()
 {
     CIdArray::PushUniqueId(this, EIdClass::RESOURCE, m_uiScriptID);
     // Make sure we don't force the cursor on
@@ -100,6 +105,10 @@ CResource::~CResource(void)
     g_pClientGame->GetElementDeleter()->DeleteRecursive(m_pResourceTXDRoot);
     m_pResourceTXDRoot = NULL;
 
+    // Destroy the ifp root so all ifp elements are deleted except those moved out
+    g_pClientGame->GetElementDeleter()->DeleteRecursive(m_pResourceIFPRoot);
+    m_pResourceIFPRoot = NULL;
+
     // Destroy the ddf root so all dff elements are deleted except those moved out
     g_pClientGame->GetElementDeleter()->DeleteRecursive(m_pResourceDFFEntity);
     m_pResourceDFFEntity = NULL;
@@ -111,6 +120,9 @@ CResource::~CResource(void)
     // Destroy the gui root so all gui elements are deleted except those moved out
     g_pClientGame->GetElementDeleter()->DeleteRecursive(m_pResourceGUIEntity);
     m_pResourceGUIEntity = NULL;
+
+    // Deallocate all models that this resource allocated earlier
+    g_pClientGame->GetManager()->GetModelManager()->DeallocateModelsAllocatedByResource(this);
 
     // Undo all changes to water
     g_pGame->GetWaterManager()->UndoChanges(this);
@@ -214,12 +226,12 @@ bool CResource::CallExportedFunction(const char* szFunctionName, CLuaArguments& 
     return false;
 }
 
-bool CResource::CanBeLoaded(void)
+bool CResource::CanBeLoaded()
 {
     return !IsActive() && !IsWaitingForInitialDownloads();
 }
 
-bool CResource::IsWaitingForInitialDownloads(void)
+bool CResource::IsWaitingForInitialDownloads()
 {
     for (std::list<CResourceConfigItem*>::iterator iter = m_ConfigFiles.begin(); iter != m_ConfigFiles.end(); ++iter)
         if ((*iter)->IsWaitingForDownload())
@@ -232,7 +244,7 @@ bool CResource::IsWaitingForInitialDownloads(void)
     return false;
 }
 
-void CResource::Load(void)
+void CResource::Load()
 {
     dassert(CanBeLoaded());
     m_pRootEntity = g_pClientGame->GetRootEntity();
@@ -336,7 +348,7 @@ void CResource::Load(void)
         assert(0);
 }
 
-void CResource::Stop(void)
+void CResource::Stop()
 {
     m_bStarting = false;
     m_bStopping = true;
@@ -345,7 +357,7 @@ void CResource::Stop(void)
     m_pResourceEntity->CallEvent("onClientResourceStop", Arguments, true);
 }
 
-SString CResource::GetState(void)
+SString CResource::GetState()
 {
     if (m_bStarting)
         return "starting";
@@ -357,7 +369,7 @@ SString CResource::GetState(void)
         return "loaded";
 }
 
-void CResource::DeleteClientChildren(void)
+void CResource::DeleteClientChildren()
 {
     // Run this on our resource entity if we have one
     if (m_pResourceEntity)

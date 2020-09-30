@@ -11,8 +11,7 @@
 
 class CEntityAddPacket;
 
-#ifndef __PACKETS_CENTITYADDPACKET_H
-#define __PACKETS_CENTITYADDPACKET_H
+#pragma once
 
 #include "../packets/CPacket.h"
 #include <vector>
@@ -23,16 +22,14 @@ extern CGame* g_pGame;
 class CEntityAddPacket : public CPacket
 {
 public:
-    ePacketID     GetPacketID(void) const { return PACKET_ID_ENTITY_ADD; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_ENTITY_ADD; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Write(NetBitStreamInterface& BitStream) const;
 
     void Add(class CElement* pElement);
-    void Clear(void) { m_Entities.clear(); };
+    void Clear() { m_Entities.clear(); };
 
 private:
     std::vector<class CElement*> m_Entities;
 };
-
-#endif

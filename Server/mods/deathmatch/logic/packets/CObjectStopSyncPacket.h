@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_COBJECTSTOPSYNCPACKET_H
-#define __PACKETS_COBJECTSTOPSYNCPACKET_H
+#pragma once
 
 #include "CPacket.h"
 
@@ -19,8 +18,8 @@ class CObjectStopSyncPacket : public CPacket
 public:
     CObjectStopSyncPacket(CObject* pObject) { m_pObject = pObject; };
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_OBJECT_STOPSYNC; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_OBJECT_STOPSYNC; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Write(NetBitStreamInterface& BitStream) const
     {
@@ -31,5 +30,3 @@ public:
 private:
     CObject* m_pObject;
 };
-
-#endif

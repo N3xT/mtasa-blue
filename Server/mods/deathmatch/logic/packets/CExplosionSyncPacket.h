@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CEXPLOSIONSYNCPACKET_H
-#define __PACKETS_CEXPLOSIONSYNCPACKET_H
+#pragma once
 
 #include "CPacket.h"
 #include <CVector.h>
@@ -35,11 +34,11 @@ public:
         EXPLOSION_TINY,
     };
 
-    CExplosionSyncPacket(void);
+    CExplosionSyncPacket();
     CExplosionSyncPacket(const CVector& vecPosition, unsigned char ucType);
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_EXPLOSION; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_EXPLOSION; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Read(NetBitStreamInterface& BitStream);
     bool Write(NetBitStreamInterface& BitStream) const;
@@ -48,5 +47,3 @@ public:
     CVector       m_vecPosition;
     unsigned char m_ucType;
 };
-
-#endif

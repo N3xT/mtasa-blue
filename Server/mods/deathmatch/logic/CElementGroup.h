@@ -11,8 +11,7 @@
 
 class CElementGroup;
 
-#ifndef CELEMENTGROUP_H
-#define CELEMENTGROUP_H
+#pragma once
 
 #include "CElement.h"
 
@@ -25,10 +24,8 @@ public:
     ~CElementGroup();
     void         Add(CElement* element);
     void         Remove(CElement* element);
-    unsigned int GetCount(void);
+    unsigned int GetCount();
 
-    CFastList<CElement*>::const_iterator IterBegin(void) { return m_elements.begin(); }
-    CFastList<CElement*>::const_iterator IterEnd(void) { return m_elements.end(); }
+    CFastList<CElement*>::const_iterator IterBegin() { return m_elements.begin(); }
+    CFastList<CElement*>::const_iterator IterEnd() { return m_elements.end(); }
 };
-
-#endif

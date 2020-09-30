@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CLUAARGUMENTS_H
-#define __CLUAARGUMENTS_H
+#pragma once
 
 extern "C"
 {
@@ -45,10 +44,10 @@ class CLuaArguments;
 class CLuaArguments
 {
 public:
-    CLuaArguments(void) {}
+    CLuaArguments() {}
     CLuaArguments(const CLuaArguments& Arguments, CFastHashMap<CLuaArguments*, CLuaArguments*>* pKnownTables = NULL);
-    CLuaArguments(NetBitStreamInterface& bitStream, std::vector<CLuaArguments*>* pKnownTables = NULL);
-    ~CLuaArguments(void) { DeleteArguments(); };
+    
+    ~CLuaArguments() { DeleteArguments(); };
 
     void CopyRecursive(const CLuaArguments& Arguments, CFastHashMap<CLuaArguments*, CLuaArguments*>* pKnownTables = NULL);
 
@@ -63,9 +62,9 @@ public:
     bool CallGlobal(class CLuaMain* pLuaMain, const char* szFunction, CLuaArguments* returnValues = NULL) const;
 
     void ReadTable(lua_State* luaVM, int iIndexBegin, CFastHashMap<const void*, CLuaArguments*>* pKnownTables = NULL);
-    void PushAsTable(lua_State* luaVM, CFastHashMap<CLuaArguments*, int>* pKnownTables = NULL);
+    void PushAsTable(lua_State* luaVM, CFastHashMap<CLuaArguments*, int>* pKnownTables = nullptr) const;
 
-    CLuaArgument* PushNil(void);
+    CLuaArgument* PushNil();
     CLuaArgument* PushBoolean(bool bBool);
     CLuaArgument* PushNumber(double dNumber);
     CLuaArgument* PushString(const std::string& strString);
@@ -83,8 +82,9 @@ public:
     CLuaArgument* PushArgument(const CLuaArgument& argument);
     CLuaArgument* PushTable(CLuaArguments* table);
 
-    void DeleteArguments(void);
-    void ValidateTableKeys(void);
+    void DeleteArguments();
+    void ValidateTableKeys();
+    void Pop();
 
     bool         ReadFromBitStream(NetBitStreamInterface& bitStream, std::vector<CLuaArguments*>* pKnownTables = NULL);
     bool         ReadFromJSONString(const char* szJSON);
@@ -95,12 +95,10 @@ public:
     bool         ReadFromJSONObject(json_object* object, std::vector<CLuaArguments*>* pKnownTables = NULL);
     bool         ReadFromJSONArray(json_object* object, std::vector<CLuaArguments*>* pKnownTables = NULL);
 
-    unsigned int                               Count(void) const { return static_cast<unsigned int>(m_Arguments.size()); };
-    std::vector<CLuaArgument*>::const_iterator IterBegin(void) const { return m_Arguments.begin(); };
-    std::vector<CLuaArgument*>::const_iterator IterEnd(void) const { return m_Arguments.end(); };
+    unsigned int                               Count() const { return static_cast<unsigned int>(m_Arguments.size()); };
+    std::vector<CLuaArgument*>::const_iterator IterBegin() const { return m_Arguments.begin(); };
+    std::vector<CLuaArgument*>::const_iterator IterEnd() const { return m_Arguments.end(); };
 
 private:
     std::vector<CLuaArgument*> m_Arguments;
 };
-
-#endif

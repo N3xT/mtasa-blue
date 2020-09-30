@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CLOGGER_H
-#define __CLOGGER_H
+#pragma once
 
 #include <cstdio>
 #include "../Config.h"
@@ -42,12 +41,12 @@ public:
 
     static void SetMinLogLevel(eLogLevel logLevel);
 
-    static void ProgressDotsBegin(void);
-    static void ProgressDotsUpdate(void);
-    static void ProgressDotsEnd(void);
+    static void ProgressDotsBegin();
+    static void ProgressDotsUpdate();
+    static void ProgressDotsEnd();
 
-    static void    BeginConsoleOutputCapture(void);
-    static SString EndConsoleOutputCapture(void);
+    static void    BeginConsoleOutputCapture();
+    static SString EndConsoleOutputCapture();
 
 private:
     static void HandleLogPrint(bool bTimeStamp, const char* szPrePend, const char* szMessage, bool bToConsole, bool bToLogFile, bool bToAuthFile,
@@ -61,5 +60,3 @@ private:
     static bool             m_bCaptureConsole;
     static CCriticalSection m_CaptureBufferMutex;
 };
-
-#endif

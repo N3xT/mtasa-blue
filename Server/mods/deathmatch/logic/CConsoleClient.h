@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CCONSOLECLIENT_H
-#define __CCONSOLECLIENT_H
+#pragma once
 
 #include "CClient.h"
 #include "CElement.h"
@@ -21,20 +20,20 @@ class CConsoleClient : public CElement, public CClient
 {
 public:
     CConsoleClient(CConsole* pConsole);
-    virtual ~CConsoleClient(void){};
+    virtual ~CConsoleClient(){};
 
-    int         GetClientType(void) { return CClient::CLIENT_CONSOLE; };
-    const char* GetNick(void) { return m_strNick; };
+    int         GetClientType() { return CClient::CLIENT_CONSOLE; };
+    const char* GetNick() { return m_strNick; };
 
     void SendEcho(const char* szEcho) { CLogger::LogPrintf("%s\n", szEcho); };
     void SendConsole(const char* szEcho) { CLogger::LogPrintf("%s\n", szEcho); };
 
-    void Unlink(void){};
-    bool ReadSpecialData(void) { return false; };
+    void Unlink(){};
+
+protected:
+    bool ReadSpecialData(const int iLine) override { return false; }
 
 protected:
     SString   m_strNick;
     CConsole* m_pConsole;
 };
-
-#endif

@@ -9,15 +9,14 @@
  *
  *****************************************************************************/
 
-#ifndef __CCOMMANDLINEPARSER_H
-#define __CCOMMANDLINEPARSER_H
+#pragma once
 
 #include "../Config.h"
 
 class CCommandLineParser
 {
 public:
-    CCommandLineParser(void);
+    CCommandLineParser();
 
     bool Parse(int iArgumentCount, char* szArguments[]);
 
@@ -67,5 +66,3 @@ private:
     unsigned int   m_uiMaxPlayers;
     bool           m_bDisableVoice;
 };
-
-#endif

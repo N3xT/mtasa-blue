@@ -102,7 +102,7 @@ namespace SharedUtil
         static SString strProfilePathCP, strProfilePathUTF8;
         if (strProfilePathCP.empty())
         {
-            char szProfilePath[MAX_PATH] = "";
+            char    szProfilePath[MAX_PATH] = "";
             wchar_t wszProfilePath[MAX_PATH] = L"";
             SHGetFolderPathA(NULL, CSIDL_PROFILE, NULL, 0, szProfilePath);
             SHGetFolderPathW(NULL, CSIDL_PROFILE, NULL, 0, wszProfilePath);
@@ -250,7 +250,7 @@ namespace SharedUtil
     // Hook adding
     //
     /////////////////////////////////////////////////////////////
-    void AddUtf8FileHooks(void)
+    void AddUtf8FileHooks()
     {
         #define ADDHOOK(module,name) \
                 pfn##name = reinterpret_cast < FUNC_##name > ( DetourFunction ( DetourFindFunction ( module, #name ), reinterpret_cast < PBYTE > ( My##name ) ) ); \
@@ -280,7 +280,7 @@ namespace SharedUtil
     // Hook taking away
     //
     /////////////////////////////////////////////////////////////
-    void RemoveUtf8FileHooks(void)
+    void RemoveUtf8FileHooks()
     {
         #define DELHOOK(name) \
             if ( pfn##name ) \

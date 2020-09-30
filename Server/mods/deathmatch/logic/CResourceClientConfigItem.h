@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef CRESOURCECLIENTCONFIGITEM_H
-#define CRESOURCECLIENTCONFIGITEM_H
+#pragma once
 
 #include "CGame.h"
 #include "CResourceFile.h"
@@ -20,11 +19,11 @@ class CResourceClientConfigItem : public CResourceFile
 {
 public:
     CResourceClientConfigItem(class CResource* resource, const char* szShortName, const char* szResourceFileName, CXMLAttributes* xmlAttributes);
-    ~CResourceClientConfigItem(void);
+    ~CResourceClientConfigItem();
 
-    bool            Start(void);
-    bool            Stop(void);
-    class CXMLNode* GetRoot(void) { return m_pXMLRootNode; }
+    bool            Start();
+    bool            Stop();
+    class CXMLNode* GetRoot() { return m_pXMLRootNode; }
 
 private:
     class CXMLFile* m_pXMLFile;
@@ -32,5 +31,3 @@ private:
 
     bool m_bInvalid;            // it failed to load
 };
-
-#endif

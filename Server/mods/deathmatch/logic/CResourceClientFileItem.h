@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef CRESOURCECLIENTFILEITEM_H
-#define CRESOURCECLIENTFILEITEM_H
+#pragma once
 
 #include "CResourceFile.h"
 
@@ -19,15 +18,13 @@ class CResourceClientFileItem : public CResourceFile
 public:
     CResourceClientFileItem(class CResource* resource, const char* szShortName, const char* szResourceFileName, CXMLAttributes* xmlAttributes,
                             bool bClientAutoDownload = true);
-    ~CResourceClientFileItem(void);
+    ~CResourceClientFileItem();
 
-    bool Start(void);
-    bool Stop(void);
+    bool Start();
+    bool Stop();
 
-    bool IsAutoDownload(void) { return m_bClientAutoDownload; };
+    bool IsAutoDownload() { return m_bClientAutoDownload; };
 
 private:
     bool m_bClientAutoDownload;
 };
-
-#endif

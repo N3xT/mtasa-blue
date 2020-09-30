@@ -13,8 +13,7 @@
 
 class CLuaModuleManager;
 
-#ifndef __CLUAMODULEMANAGER_H
-#define __CLUAMODULEMANAGER_H
+#pragma once
 
 #include "CLuaMain.h"
 #include "ILuaModuleManager.h"
@@ -29,10 +28,10 @@ class CLuaModuleManager
 {
 public:
     CLuaModuleManager(CLuaManager* pLuaManager);
-    ~CLuaModuleManager(void);
+    ~CLuaModuleManager();
 
     // functions for deathmatch
-    void DoPulse(void);
+    void DoPulse();
     int  LoadModule(const char* szShortFileName, const char* szFileName, bool bLateLoad);
     void SetScriptDebugging(CScriptDebugging* pScriptDebugging);
     void RegisterFunctions(lua_State* luaVM);
@@ -41,13 +40,11 @@ public:
     void ResourceStopping(lua_State* luaVM);
     void ResourceStopped(lua_State* luaVM);
 
-    CLuaManager*      GetLuaManager(void) { return m_pLuaManager; };
-    list<CLuaModule*> GetLoadedModules(void) { return m_Modules; };
+    CLuaManager*      GetLuaManager() { return m_pLuaManager; };
+    list<CLuaModule*> GetLoadedModules() { return m_Modules; };
 
 private:
     CScriptDebugging* m_pScriptDebugging;
     CLuaManager*      m_pLuaManager;
     list<CLuaModule*> m_Modules;
 };
-
-#endif

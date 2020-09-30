@@ -11,7 +11,7 @@
 
 #include "StdInc.h"
 
-CEventDamageSA::CEventDamageSA(CEntity *pEntity, unsigned int i_1, eWeaponType weaponType, ePedPieceTypes hitZone, unsigned char uc_2, bool b_3, bool b_4)
+CEventDamageSA::CEventDamageSA(CEntity* pEntity, unsigned int i_1, eWeaponType weaponType, ePedPieceTypes hitZone, unsigned char uc_2, bool b_3, bool b_4)
 {
     m_pInterface = new CEventDamageSAInterface;
     m_pDamageResponse = new CPedDamageResponseSA(&m_pInterface->damageResponseData);
@@ -35,7 +35,7 @@ CEventDamageSA::CEventDamageSA(CEntity *pEntity, unsigned int i_1, eWeaponType w
     }
 }
 
-CEventDamageSA::CEventDamageSA(CEventDamageSAInterface *pInterface)
+CEventDamageSA::CEventDamageSA(CEventDamageSAInterface* pInterface)
 {
     m_pInterface = pInterface;
     m_pDamageResponse = new CPedDamageResponseSA(&m_pInterface->damageResponseData);
@@ -43,7 +43,7 @@ CEventDamageSA::CEventDamageSA(CEventDamageSAInterface *pInterface)
     m_DamageReason = EDamageReason::OTHER;
 }
 
-CEventDamageSA::~CEventDamageSA(void)
+CEventDamageSA::~CEventDamageSA()
 {
     delete m_pDamageResponse;
 
@@ -60,32 +60,19 @@ CEventDamageSA::~CEventDamageSA(void)
     }
 }
 
-CEntity *CEventDamageSA::GetInflictingEntity(void)
+CEntity* CEventDamageSA::GetInflictingEntity()
 {
-    CEntity *           pReturn = NULL;
-    CEntitySAInterface *pInterface = m_pInterface->pInflictor;
+    CEntity*            pReturn = NULL;
+    CEntitySAInterface* pInterface = m_pInterface->pInflictor;
     if (pInterface)
     {
-        CPoolsSA *pPools = ((CPoolsSA *)pGame->GetPools());
-        switch (pInterface->nType)
-        {
-            case ENTITY_TYPE_PED:
-                pReturn = pPools->GetPed((DWORD *)pInterface);
-                break;
-            case ENTITY_TYPE_VEHICLE:
-                pReturn = pPools->GetVehicle((DWORD *)pInterface);
-                break;
-            case ENTITY_TYPE_OBJECT:
-                pReturn = pPools->GetObject((DWORD *)pInterface);
-                break;
-            default:
-                break;
-        }
+        CPools* pPools = pGame->GetPools();
+        return pPools->GetEntity((DWORD*)pInterface);
     }
     return pReturn;
 }
 
-bool CEventDamageSA::HasKilledPed(void)
+bool CEventDamageSA::HasKilledPed()
 {
     DWORD dwThis = (DWORD)m_pInterface;
     DWORD dwFunc = FUNC_CEventDamage_HasKilledPed;
@@ -99,7 +86,7 @@ bool CEventDamageSA::HasKilledPed(void)
     return bReturn;
 }
 
-float CEventDamageSA::GetDamageApplied(void)
+float CEventDamageSA::GetDamageApplied()
 {
     DWORD dwThis = (DWORD)m_pInterface;
     DWORD dwFunc = FUNC_CEventDamage_GetDamageApplied;
@@ -113,7 +100,7 @@ float CEventDamageSA::GetDamageApplied(void)
     return fReturn;
 }
 
-AssocGroupId CEventDamageSA::GetAnimGroup(void)
+AssocGroupId CEventDamageSA::GetAnimGroup()
 {
     DWORD        dwThis = (DWORD)m_pInterface;
     DWORD        dwFunc = FUNC_CEventDamage_GetAnimGroup;
@@ -127,7 +114,7 @@ AssocGroupId CEventDamageSA::GetAnimGroup(void)
     return animGroup;
 }
 
-AnimationId CEventDamageSA::GetAnimId(void)
+AnimationId CEventDamageSA::GetAnimId()
 {
     DWORD       dwThis = (DWORD)m_pInterface;
     DWORD       dwFunc = FUNC_CEventDamage_GetAnimId;
@@ -141,7 +128,7 @@ AnimationId CEventDamageSA::GetAnimId(void)
     return animID;
 }
 
-bool CEventDamageSA::GetAnimAdded(void)
+bool CEventDamageSA::GetAnimAdded()
 {
     bool  bReturn;
     DWORD dwThis = (DWORD)m_pInterface;
@@ -155,7 +142,7 @@ bool CEventDamageSA::GetAnimAdded(void)
     return bReturn;
 }
 
-void CEventDamageSA::ComputeDeathAnim(CPed *pPed, bool bUnk)
+void CEventDamageSA::ComputeDeathAnim(CPed* pPed, bool bUnk)
 {
     DWORD dwThis = (DWORD)m_pInterface;
     DWORD dwPed = (DWORD)pPed->GetInterface();
@@ -169,7 +156,7 @@ void CEventDamageSA::ComputeDeathAnim(CPed *pPed, bool bUnk)
     }
 }
 
-void CEventDamageSA::ComputeDamageAnim(CPed *pPed, bool bUnk)
+void CEventDamageSA::ComputeDamageAnim(CPed* pPed, bool bUnk)
 {
     DWORD dwThis = (DWORD)m_pInterface;
     DWORD dwPed = (DWORD)pPed->GetInterface();
@@ -183,7 +170,7 @@ void CEventDamageSA::ComputeDamageAnim(CPed *pPed, bool bUnk)
     }
 }
 
-bool CEventDamageSA::AffectsPed(CPed *pPed)
+bool CEventDamageSA::AffectsPed(CPed* pPed)
 {
     bool  bReturn;
     DWORD dwPedInterface = (DWORD)pPed->GetInterface();

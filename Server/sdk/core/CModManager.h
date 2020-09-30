@@ -9,17 +9,14 @@
  *
  *****************************************************************************/
 
-#ifndef __CMODMANAGER_H
-#define __CMODMANAGER_H
+#pragma once
 
 class CModManager
 {
 public:
     virtual bool RequestLoad(const char* szModName) = 0;
 
-    virtual const char* GetServerPath(void) = 0;
-    virtual const char* GetModPath(void) = 0;
+    virtual const char* GetServerPath() = 0;
+    virtual const char* GetModPath() = 0;
     virtual SString     GetAbsolutePath(const char* szRelative) = 0;
 };
-
-#endif

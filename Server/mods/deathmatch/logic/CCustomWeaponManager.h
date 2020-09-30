@@ -8,8 +8,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CCUSTOMWEAPONMANAGER_H
-#define __CCUSTOMWEAPONMANAGER_H
+#pragma once
 
 #include <list>
 #include "CCommon.h"
@@ -25,12 +24,12 @@ class CCustomWeaponManager
     friend class CCustomWeapon;
 
 public:
-    CCustomWeaponManager(void);
-    ~CCustomWeaponManager(void);
-    void DoPulse(void);
+    CCustomWeaponManager();
+    ~CCustomWeaponManager();
+    void DoPulse();
 
-    CCustomWeaponListType::const_iterator IterBegin(void) const { return m_List.begin(); };
-    CCustomWeaponListType::const_iterator IterEnd(void) const { return m_List.end(); };
+    CCustomWeaponListType::const_iterator IterBegin() const { return m_List.begin(); };
+    CCustomWeaponListType::const_iterator IterEnd() const { return m_List.end(); };
 
 private:
     void AddToList(CCustomWeapon* pObject) { m_List.push_back(pObject); };
@@ -38,4 +37,3 @@ private:
 
     CCustomWeaponListType m_List;
 };
-#endif

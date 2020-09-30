@@ -17,7 +17,7 @@ CTasksSA::CTasksSA(CTaskManagementSystemSA* pTaskManagementSystem)
     m_pTaskManagementSystem = pTaskManagementSystem;
 }
 
-CTaskSimplePlayerOnFoot* CTasksSA::CreateTaskSimplePlayerOnFoot(void)
+CTaskSimplePlayerOnFoot* CTasksSA::CreateTaskSimplePlayerOnFoot()
 {
     DEBUG_TRACE("CTaskSimplePlayerOnFoot* CTasksSA::CreateTaskSimplePlayerOnFoot ( void )");
 
@@ -26,7 +26,7 @@ CTaskSimplePlayerOnFoot* CTasksSA::CreateTaskSimplePlayerOnFoot(void)
     return pTask;
 }
 
-CTaskComplexFacial* CTasksSA::CreateTaskComplexFacial(void)
+CTaskComplexFacial* CTasksSA::CreateTaskComplexFacial()
 {
     DEBUG_TRACE("CTaskComplexFacial* CTasksSA::CreateTaskComplexFacial ( void )");
 
@@ -303,9 +303,8 @@ CTaskSimpleFight* CTasksSA::CreateTaskSimpleFight(CEntity* pTargetEntity, int nC
 // Detect when GTA will start the 'be hit' task
 //
 ////////////////////////////////////////////////////////////////
-__declspec(noinline)
-void _cdecl OnCEventHandler_ComputeDamageResponse_Mid(CPedSAInterface* pPedVictim, CPedSAInterface* pPedAttacker, ePedPieceTypes hitBodyPart, int hitBodySide,
-                                                      int weaponId)
+__declspec(noinline) void _cdecl OnCEventHandler_ComputeDamageResponse_Mid(CPedSAInterface* pPedVictim, CPedSAInterface* pPedAttacker,
+                                                                           ePedPieceTypes hitBodyPart, int hitBodySide, int weaponId)
 {
     // Make sure victim is local player
     CPedSAInterface* pLocalPlayer = ((CPoolsSA*)pGame->GetPools())->GetPedInterface((DWORD)1);
@@ -346,7 +345,7 @@ void _declspec(naked) HOOK_CEventHandler_ComputeDamageResponse_Mid()
 // Setup hooks
 //
 //////////////////////////////////////////////////////////////////////////////////////////
-void CTasksSA::StaticSetHooks(void)
+void CTasksSA::StaticSetHooks()
 {
     EZHookInstall(CEventHandler_ComputeDamageResponse_Mid);
 }

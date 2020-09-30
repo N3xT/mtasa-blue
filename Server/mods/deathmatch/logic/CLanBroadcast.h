@@ -11,8 +11,7 @@
 
 class CLanBroadcastDLL;
 
-#ifndef __CLANBROADCASTDLL_H
-#define __CLANBROADCASTDLL_H
+#pragma once
 
 #include <Common.h>
 #include <iostream>
@@ -33,11 +32,11 @@ class CLanBroadcast
 {
 public:
     CLanBroadcast(unsigned short usServerPort);
-    ~CLanBroadcast(void);
+    ~CLanBroadcast();
 
-    void DoPulse(void);
+    void DoPulse();
 
-    unsigned short GetPort(void) { return SERVER_LIST_BROADCAST_PORT; };
+    unsigned short GetPort() { return SERVER_LIST_BROADCAST_PORT; };
 
 private:
     unsigned int m_Socket;
@@ -46,5 +45,3 @@ private:
     std::string m_strClientMessage;
     std::string m_strServerMessage;
 };
-
-#endif

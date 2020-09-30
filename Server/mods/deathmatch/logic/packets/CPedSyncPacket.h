@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CPEDSYNCPACKET_H
-#define __PACKETS_CPEDSYNCPACKET_H
+#pragma once
 
 #include <CVector.h>
 #include "CPacket.h"
@@ -35,19 +34,17 @@ public:
     };
 
 public:
-    CPedSyncPacket(void){};
-    ~CPedSyncPacket(void);
+    CPedSyncPacket(){};
+    ~CPedSyncPacket();
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_PED_SYNC; };
-    unsigned long GetFlags(void) const { return PACKET_MEDIUM_PRIORITY | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_PED_SYNC; };
+    unsigned long GetFlags() const { return PACKET_MEDIUM_PRIORITY | PACKET_SEQUENCED; };
 
     bool Read(NetBitStreamInterface& BitStream);
     bool Write(NetBitStreamInterface& BitStream) const;
 
-    std::vector<SyncData*>::const_iterator IterBegin(void) { return m_Syncs.begin(); };
-    std::vector<SyncData*>::const_iterator IterEnd(void) { return m_Syncs.end(); };
+    std::vector<SyncData*>::const_iterator IterBegin() { return m_Syncs.begin(); };
+    std::vector<SyncData*>::const_iterator IterEnd() { return m_Syncs.end(); };
 
     std::vector<SyncData*> m_Syncs;
 };
-
-#endif

@@ -11,7 +11,7 @@
 
 #include "StdInc.h"
 
-int CAnimBlockSAInterface::GetIndex(void)
+int CAnimBlockSAInterface::GetIndex()
 {
     return (((DWORD)this - ARRAY_CAnimManager_AnimBlocks) / 32);
 }
@@ -42,4 +42,14 @@ void CAnimBlockSA::Request(EModelRequestType requestType, bool bAllowBlockingFai
         pGame->GetStreaming()->RequestModel(dwModelID, 0x04);
         AddRef();
     }
+}
+
+CAnimBlendHierarchySAInterface* CAnimBlockSA::GetAnimationHierarchyInterface(size_t iAnimation)
+{
+    if (!IsLoaded())
+        return nullptr;
+
+    iAnimation += m_pInterface->idOffset;
+    BYTE* arrAnimations = reinterpret_cast<BYTE*>(ARRAY_CAnimManager_Animations);
+    return reinterpret_cast<CAnimBlendHierarchySAInterface*>(arrAnimations + sizeof(CAnimBlendHierarchySAInterface) * iAnimation);
 }

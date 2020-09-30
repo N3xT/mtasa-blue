@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef CRESOURCESCRIPTITEM_H
-#define CRESOURCESCRIPTITEM_H
+#pragma once
 
 #include "CResourceFile.h"
 
@@ -18,12 +17,10 @@ class CResourceScriptItem : public CResourceFile
 {
 public:
     CResourceScriptItem(class CResource* resource, const char* szShortName, const char* szResourceFileName, CXMLAttributes* xmlAttributes);
-    ~CResourceScriptItem(void);
+    ~CResourceScriptItem();
 
-    bool Start(void);
-    bool Stop(void);
+    bool Start();
+    bool Stop();
 
 private:
 };
-
-#endif

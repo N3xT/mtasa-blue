@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CPICKUPHITCONFIRMPACKET_H
-#define __PACKETS_CPICKUPHITCONFIRMPACKET_H
+#pragma once
 
 #include "CPacket.h"
 
@@ -23,8 +22,8 @@ public:
         m_bPlaySound = bPlaySound;
     };
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_PICKUP_HIT_CONFIRM; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_PICKUP_HIT_CONFIRM; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Write(NetBitStreamInterface& BitStream) const;
 
@@ -32,5 +31,3 @@ private:
     class CPickup* m_pPickup;
     bool           m_bPlaySound;
 };
-
-#endif

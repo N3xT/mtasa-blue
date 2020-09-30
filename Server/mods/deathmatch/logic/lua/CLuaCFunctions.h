@@ -11,8 +11,7 @@
 
 class CLuaCFunctions;
 
-#ifndef __CLUACFUNCTIONS_H
-#define __CLUACFUNCTIONS_H
+#pragma once
 
 #include "LuaCommon.h"
 
@@ -21,12 +20,12 @@ class CLuaCFunction
 public:
     CLuaCFunction(const char* szName, lua_CFunction f, bool bRestricted);
 
-    lua_CFunction GetAddress(void) { return m_Function; }
+    lua_CFunction GetAddress() { return m_Function; }
 
-    const SString& GetName(void) { return m_strName; }
+    const SString& GetName() { return m_strName; }
     void           SetName(std::string& strName) { m_strName = strName; }
 
-    bool IsRestricted(void) { return m_bRestricted; }
+    bool IsRestricted() { return m_bRestricted; }
 
 private:
     lua_CFunction m_Function;
@@ -48,7 +47,7 @@ public:
 
     static void RegisterFunctionsWithVM(lua_State* luaVM);
 
-    static void RemoveAllFunctions(void);
+    static void RemoveAllFunctions();
 
 private:
     static CFastHashMap<lua_CFunction, CLuaCFunction*> ms_Functions;
@@ -56,5 +55,3 @@ private:
     static void*                                       ms_pFunctionPtrLow;
     static void*                                       ms_pFunctionPtrHigh;
 };
-
-#endif

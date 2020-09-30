@@ -1,4 +1,3 @@
-#pragma message("Compiling precompiled header.\n")
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -16,6 +15,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <string_view>
 #include <sstream>
 #include <vector>
 #include <cstdio>
@@ -26,6 +26,7 @@
 // SDK includes
 #include <core/CLocalizationInterface.h>
 #include <core/CTrayIconInterface.h>
+#include <core/CDiscordManagerInterface.h>
 #include <core/CCoreInterface.h>
 #include <core/CExceptionInformation.h>
 #include <xml/CXML.h>
@@ -77,6 +78,7 @@
 #include <CClientStreamSectorRow.h>
 #include <CClientTask.h>
 #include <CClientTXD.h>
+#include <CClientIFP.h>
 #include <CClientWater.h>
 #include <CClientWeapon.h>
 #include <CClientRenderElement.h>
@@ -92,7 +94,11 @@
 #include <CElementArray.h>
 #include <CLogger.h>
 #include <CMapEventManager.h>
+#include <CClientModelManager.h>
 #include <CModelNames.h>
+#include <CIFPEngine.h>
+#include <CFileReader.h>
+#include <CIFPAnimations.h>
 #include <CScriptFile.h>
 #include <CWeaponNames.h>
 #include <CVehicleNames.h>
@@ -146,7 +152,6 @@
 #include "CEvents.h"
 #include "HeapTrace.h"
 #include "logic/CClientGame.h"
-#include "logic/CGameEntityXRefManager.h"
 #include "logic/CClientModelCacheManager.h"
 #include "logic/CClientPerfStatManager.h"
 #include "logic/CDeathmatchVehicle.h"

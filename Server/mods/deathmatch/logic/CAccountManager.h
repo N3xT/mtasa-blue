@@ -11,8 +11,7 @@
 
 class CAccountManager;
 
-#ifndef __CACCOUNTMANAGER_H
-#define __CACCOUNTMANAGER_H
+#pragma once
 
 #include "CAccount.h"
 typedef uint SDbConnectionId;
@@ -34,8 +33,8 @@ public:
 
     // CMappedList functions
     bool     contains(CAccount* item) const { return Super::contains(item); }
-    iterator begin(void) { return Super::begin(); }
-    iterator end(void) { return Super::end(); }
+    iterator begin() { return Super::begin(); }
+    iterator end() { return Super::end(); }
 
     void push_back(CAccount* item)
     {
@@ -52,14 +51,14 @@ public:
         assert(m_NameAccountMap.size() == size());
     }
 
-    void clear(void)
+    void clear()
     {
         assert(m_NameAccountMap.size() == size());
         m_NameAccountMap.clear();
         Super::clear();
     }
 
-    size_t size(void) const { return Super::size(); }
+    size_t size() const { return Super::size(); }
 
     // Account functions
     void FindAccountMatches(std::vector<CAccount*>* pOutResults, const SString& strName, bool bCaseSensitive)
@@ -116,18 +115,18 @@ class CAccountManager
 
 public:
     CAccountManager(const SString& strDbPathFilename);
-    ~CAccountManager(void);
+    ~CAccountManager();
 
-    void DoPulse(void);
+    void DoPulse();
 
-    bool Load(void);
+    bool Load();
     void Save(bool bForce = false);
     void Save(CAccount* pParent, bool bCheckForErrors = true);
 
-    bool SaveSettings(void);
-    bool IntegrityCheck(void);
+    bool SaveSettings();
+    bool IntegrityCheck();
 
-    CAccount* Get(const char* szName);
+    CAccount* Get(const char* szName, const char* szPassword = nullptr, bool caseSensitive = true);
     CAccount* GetAccountFromScriptID(uint uiScriptID);
     SString   GetActiveCaseVariation(const SString& strName);
 
@@ -139,9 +138,10 @@ public:
     bool                          CopyAccountData(CAccount* pFromAccount, CAccount* pToAccount);
     bool                          GetAllAccountData(CAccount* pAccount, lua_State* pLua);
 
-    void GetAccountsBySerial(const SString& strSerial, std::vector<CAccount*>& outAccounts);
-    void GetAccountsByIP(const SString& strIP, std::vector<CAccount*>& outAccounts);
-    void GetAccountsByData(const SString& dataName, const SString& value, std::vector<CAccount*>& outAccounts);
+    void      GetAccountsBySerial(const SString& strSerial, std::vector<CAccount*>& outAccounts);
+    void      GetAccountsByIP(const SString& strIP, std::vector<CAccount*>& outAccounts);
+    CAccount* GetAccountByID(int ID);
+    void      GetAccountsByData(const SString& dataName, const SString& value, std::vector<CAccount*>& outAccounts);
 
     CAccount* AddGuestAccount(const SString& strName);
     CAccount* AddConsoleAccount(const SString& strName);
@@ -160,10 +160,10 @@ protected:
     void ChangingName(CAccount* pAccount, const SString& strOldName, const SString& strNewName);
     void LoadAccountSerialUsage(CAccount* pAccount);
     void SaveAccountSerialUsage(CAccount* pAccount);
-    void ReconnectToDatabase(void);
+    void ReconnectToDatabase();
 
 public:
-    void        RemoveAll(void);
+    void        RemoveAll();
     static void StaticDbCallback(CDbJobData* pJobData, void* pContext);
     void        DbCallback(CDbJobData* pJobData);
     static bool IsValidAccountName(const SString& strName);
@@ -171,8 +171,8 @@ public:
     static bool IsValidNewAccountName(const SString& strName);
     static bool IsValidNewPassword(const SString& strPassword);
 
-    CMappedAccountList::const_iterator IterBegin(void) { return m_List.begin(); };
-    CMappedAccountList::const_iterator IterEnd(void) { return m_List.end(); };
+    CMappedAccountList::const_iterator IterBegin() { return m_List.begin(); };
+    CMappedAccountList::const_iterator IterEnd() { return m_List.end(); };
 
 protected:
     CMappedAccountList m_List;
@@ -184,5 +184,3 @@ protected:
     int                m_iAccounts;
     SString            m_strDbPathFilename;
 };
-
-#endif

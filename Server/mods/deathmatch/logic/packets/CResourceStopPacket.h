@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CRESOURCESTOPPACKET_H
-#define __PACKETS_CRESOURCESTOPPACKET_H
+#pragma once
 
 #include "../packets/CPacket.h"
 
@@ -19,13 +18,11 @@ class CResourceStopPacket : public CPacket
 public:
     CResourceStopPacket(unsigned short usID);
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_RESOURCE_STOP; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_RESOURCE_STOP; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Write(NetBitStreamInterface& BitStream) const;
 
 private:
     unsigned short m_usID;
 };
-
-#endif

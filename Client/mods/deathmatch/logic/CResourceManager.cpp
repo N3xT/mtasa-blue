@@ -13,11 +13,11 @@
 
 using std::list;
 
-CResourceManager::CResourceManager(void)
+CResourceManager::CResourceManager()
 {
 }
 
-CResourceManager::~CResourceManager(void)
+CResourceManager::~CResourceManager()
 {
     while (!m_resources.empty())
     {
@@ -27,7 +27,7 @@ CResourceManager::~CResourceManager(void)
 }
 
 CResource* CResourceManager::Add(unsigned short usNetID, const char* szResourceName, CClientEntity* pResourceEntity, CClientEntity* pResourceDynamicEntity,
-                                 const SString& strMinServerReq, const SString& strMinClientReq, bool bEnableOOP)
+                                 const CMtaVersion& strMinServerReq, const CMtaVersion& strMinClientReq, bool bEnableOOP)
 {
     CResource* pResource = new CResource(usNetID, szResourceName, pResourceEntity, pResourceDynamicEntity, strMinServerReq, strMinClientReq, bEnableOOP);
     if (pResource)
@@ -94,7 +94,7 @@ CResource* CResourceManager::GetResource(const char* szResourceName)
     return NULL;
 }
 
-void CResourceManager::OnDownloadGroupFinished(void)
+void CResourceManager::OnDownloadGroupFinished()
 {
     // Try to load newly ready resources
     for (std::list<CResource*>::const_iterator iter = m_resources.begin(); iter != m_resources.end(); ++iter)
@@ -141,7 +141,7 @@ bool CResourceManager::Exists(CResource* pResource)
     return m_resources.Contains(pResource);
 }
 
-void CResourceManager::StopAll(void)
+void CResourceManager::StopAll()
 {
     while (m_resources.size() > 0)
     {
@@ -153,6 +153,11 @@ void CResourceManager::StopAll(void)
 bool CResourceManager::ParseResourcePathInput(std::string strInput, CResource*& pResource, std::string* pStrPath, std::string* pStrMetaPath)
 {
     ReplaceOccurrencesInString(strInput, "\\", "/");
+
+    // Disallow file paths with a directory separator at the end
+    if (strInput.back() == '/')
+        return false;
+
     eAccessType accessType = ACCESS_PUBLIC;
     std::string strMetaPath;
 
@@ -242,7 +247,7 @@ void CResourceManager::OnFileModifedByScript(const SString& strInFilename, const
 }
 
 // Check resource file data matches server checksum
-void CResourceManager::ValidateResourceFile(const SString& strInFilename, const CBuffer& fileData)
+void CResourceManager::ValidateResourceFile(const SString& strInFilename, const char* buffer, size_t bufferSize)
 {
     SString                strFilename = PathConform(strInFilename).ToLower();
     CDownloadableResource* pResourceFile = MapFindRef(m_ResourceFileMap, strFilename);
@@ -257,28 +262,27 @@ void CResourceManager::ValidateResourceFile(const SString& strInFilename, const 
         else
         {
             CChecksum checksum;
-            if (!fileData.IsEmpty())
-                checksum = CChecksum::GenerateChecksumFromBuffer(fileData.GetData(), fileData.GetSize());
+            if (buffer)
+                checksum = CChecksum::GenerateChecksumFromBuffer(buffer, bufferSize);
             else
                 checksum = CChecksum::GenerateChecksumFromFile(strInFilename);
             if (checksum != pResourceFile->GetServerChecksum())
             {
+                char szMd5[33];
+                CMD5Hasher::ConvertToHex(checksum.md5, szMd5);
+                char szMd5Wanted[33];
+                CMD5Hasher::ConvertToHex(pResourceFile->GetServerChecksum().md5, szMd5Wanted);
+                SString strMessage("%s [Expected Size:%d MD5:%s][Got Size:%d MD5:%s] ", *ConformResourcePath(strInFilename), pResourceFile->GetDownloadSize(),
+                                   szMd5Wanted, (int)FileSize(strInFilename), szMd5);
                 if (pResourceFile->IsDownloaded())
                 {
-                    char szMd5[33];
-                    CMD5Hasher::ConvertToHex(checksum.md5, szMd5);
-                    char szMd5Wanted[33];
-                    CMD5Hasher::ConvertToHex(pResourceFile->GetServerChecksum().md5, szMd5Wanted);
-                    SString strMessage("Resource file checksum failed: %s [Size:%d MD5:%s][Wanted:%s][datasize:%d] ", *ConformResourcePath(strInFilename),
-                                       (int)FileSize(strInFilename), szMd5, szMd5Wanted, fileData.GetSize());
+                    strMessage = "Resource file unexpected change: " + strMessage;
                     g_pClientGame->TellServerSomethingImportant(1007, strMessage);
+                    g_pClientGame->GetScriptDebugging()->LogWarning(NULL, strMessage);
                 }
                 else if (pResourceFile->IsAutoDownload())
                 {
-                    char szMd5[33];
-                    CMD5Hasher::ConvertToHex(checksum.md5, szMd5);
-                    SString strMessage("Attempt to load resource file before it is ready: %s [Size:%d MD5:%s] ", *ConformResourcePath(strInFilename),
-                                       (int)FileSize(strInFilename), szMd5);
+                    strMessage = "Attempt to load resource file before it is ready: " + strMessage;
                     g_pClientGame->TellServerSomethingImportant(1008, strMessage);
                 }
             }

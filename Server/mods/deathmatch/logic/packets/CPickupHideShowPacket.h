@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CPICKUPHIDESHOWPACKET_H
-#define __PACKETS_CPICKUPHIDESHOWPACKET_H
+#pragma once
 
 #include "CPacket.h"
 #include <vector>
@@ -20,21 +19,19 @@ class CPickupHideShowPacket : public CPacket
 public:
     CPickupHideShowPacket(bool bShow) { m_bShow = bShow; };
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_PICKUP_HIDESHOW; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_PICKUP_HIDESHOW; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Write(NetBitStreamInterface& BitStream) const;
 
-    bool GetShow(void) { return m_bShow; };
+    bool GetShow() { return m_bShow; };
     void SetShow(bool bShow) { m_bShow = bShow; };
 
     void         Add(class CPickup* pPickup) { m_List.push_back(pPickup); };
-    void         Clear(void) { m_List.clear(); };
-    unsigned int Count(void) { return static_cast<unsigned int>(m_List.size()); };
+    void         Clear() { m_List.clear(); };
+    unsigned int Count() { return static_cast<unsigned int>(m_List.size()); };
 
 private:
     bool                        m_bShow;
     std::vector<class CPickup*> m_List;
 };
-
-#endif

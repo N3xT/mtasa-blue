@@ -8,8 +8,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CWEAPONSTATMANAGER_H
-#define __CWEAPONSTATMANAGER_H
+#pragma once
 
 #include <list>
 #include "CCommon.h"
@@ -77,12 +76,12 @@ struct sWeaponInfo
 class CWeaponStatManager
 {
 public:
-    CWeaponStatManager(void);
-    ~CWeaponStatManager(void);
+    CWeaponStatManager();
+    ~CWeaponStatManager();
     CWeaponStat* GetWeaponStats(eWeaponType type, eWeaponSkill skill = WEAPONSKILL_STD);
     CWeaponStat* GetWeaponStatsFromSkillLevel(eWeaponType type, float fSkillLevel);
     CWeaponStat* GetOriginalWeaponStats(eWeaponType type, eWeaponSkill skill = WEAPONSKILL_STD);
-    void         Init(void);
+    void         Init();
     bool         LoadDefault(CWeaponStat* pDest, eWeaponType weaponType, eWeaponSkill skill = WEAPONSKILL_STD);
     float        GetWeaponRangeFromSkillLevel(eWeaponType eWeapon, float fSkillLevel);
 
@@ -96,5 +95,3 @@ private:
     static SFixedArray<sWeaponInfo, WEAPONTYPE_MAX + 1> OriginalNormalWeaponData;
     static SFixedArray<sWeaponInfo, WEAPONTYPE_MAX + 1> OriginalHitmanWeaponData;
 };
-
-#endif

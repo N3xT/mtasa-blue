@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef CRESOURCEHTMLITEM_H
-#define CRESOURCEHTMLITEM_H
+#pragma once
 
 #include "CResourceFile.h"
 #include "ehs/ehs.h"
@@ -24,21 +23,21 @@ class CResourceHTMLItem : public CResourceFile
 public:
     CResourceHTMLItem(class CResource* resource, const char* szShortName, const char* szResourceFileName, CXMLAttributes* xmlAttributes, bool bIsDefault,
                       bool bIsRaw, bool bRestricted, bool bOOPEnabled);
-    ~CResourceHTMLItem(void);
+    ~CResourceHTMLItem();
 
-    bool         Start(void);
-    bool         Stop(void);
+    bool         Start();
+    bool         Stop();
     ResponseCode Request(HttpRequest* ipoHttpRequest, HttpResponse* ipoHttpResponse, class CAccount* account);
     bool         AppendToPageBuffer(const char* szText, size_t length = 0);
 
     void SetResponseHeader(const char* szHeaderName, const char* szHeaderValue);
     void SetResponseCode(int responseCode);
     void SetResponseCookie(const char* szCookieName, const char* szCookieValue);
-    void ClearPageBuffer(void);
+    void ClearPageBuffer();
 
-    bool IsDefaultPage(void) { return m_bDefault; }
+    bool IsDefaultPage() { return m_bDefault; }
     void SetDefaultPage(bool bDefault) { m_bDefault = bDefault; }
-    bool IsRestricted(void) { return m_bRestricted; };
+    bool IsRestricted() { return m_bRestricted; };
 
 private:
     char ReadChar(FILE* pFile) { return (unsigned char)fgetc(pFile); }
@@ -57,5 +56,3 @@ private:
     ResponseCode  m_responseCode;
     HttpResponse* m_currentResponse;
 };
-
-#endif

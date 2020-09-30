@@ -8,19 +8,18 @@
  *
  *****************************************************************************/
 
-#ifndef __CBUILDINGREMOVAL_H
-#define __CBUILDINGREMOVAL_H
+#pragma once
 
 class CBuildingRemoval
 {
 public:
     CBuildingRemoval(unsigned short usModel, float fRadius, const CVector& vecPos, char cInterior);
-    ~CBuildingRemoval(void);
+    ~CBuildingRemoval();
 
-    float          GetRadius(void) { return m_fRadius; }
-    const CVector& GetPosition(void) { return m_vecPos; }
-    unsigned short GetModel(void) { return m_usModel; }
-    char           GetInterior(void) { return m_cInterior; }
+    float          GetRadius() { return m_fRadius; }
+    const CVector& GetPosition() { return m_vecPos; }
+    unsigned short GetModel() { return m_usModel; }
+    char           GetInterior() { return m_cInterior; }
 
 private:
     unsigned short m_usModel;
@@ -28,4 +27,3 @@ private:
     float          m_fRadius;
     char           m_cInterior;
 };
-#endif

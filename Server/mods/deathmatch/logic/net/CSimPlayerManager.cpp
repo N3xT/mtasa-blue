@@ -127,7 +127,7 @@ void CSimPlayerManager::UpdateSimPlayer(CPlayer* pPlayer)
     //
     CVehicle* pVehicle = pPlayer->GetOccupiedVehicle();
 
-    pSim->m_iStatus = pPlayer->GetStatus();
+    pSim->m_bIsJoined = pPlayer->IsJoined();
     pSim->m_usBitStreamVersion = pPlayer->GetBitStreamVersion();
     pSim->m_bHasOccupiedVehicle = pVehicle != NULL;
     pSim->m_PlayerID = pPlayer->GetID();
@@ -181,7 +181,7 @@ void CSimPlayerManager::UpdateSimPlayer(CPlayer* pPlayer)
 // Lock all sim activity
 //
 ///////////////////////////////////////////////////////////////////////////
-void CSimPlayerManager::LockSimSystem(void)
+void CSimPlayerManager::LockSimSystem()
 {
     m_CS.Lock();
     assert(!m_bIsLocked);
@@ -198,7 +198,7 @@ void CSimPlayerManager::LockSimSystem(void)
 // Unlock all sim activity
 //
 ///////////////////////////////////////////////////////////////////////////
-void CSimPlayerManager::UnlockSimSystem(void)
+void CSimPlayerManager::UnlockSimSystem()
 {
     assert(m_bIsLocked);
     m_bIsLocked = false;
@@ -517,7 +517,7 @@ void CSimPlayerManager::Broadcast(const CSimPacket& Packet, const std::multimap<
 // Returns list of players, grouped by bitstream version
 //
 ///////////////////////////////////////////////////////////////////////////
-const std::multimap<ushort, CSimPlayer*>& CSimPlayer::GetPuresyncSendList(void)
+const std::multimap<ushort, CSimPlayer*>& CSimPlayer::GetPuresyncSendList()
 {
     if (m_bSendListChanged)
     {

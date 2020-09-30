@@ -9,23 +9,20 @@
  *
  *****************************************************************************/
 
-#ifndef __CCLOCK_H
-#define __CCLOCK_H
+#pragma once
 
 class CClock
 {
 public:
-    CClock(void);
+    CClock();
 
     void Get(unsigned char& ucHour, unsigned char& ucMinute);
     void Set(unsigned char ucHour, unsigned char ucMinute);
 
     void          SetMinuteDuration(unsigned long ulDuration);
-    unsigned long GetMinuteDuration(void);
+    unsigned long GetMinuteDuration();
 
 private:
     unsigned long long m_ullMidnightTime;
     unsigned long      m_ulMinuteDuration;
 };
-
-#endif

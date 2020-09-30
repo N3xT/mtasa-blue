@@ -9,14 +9,14 @@
  *
  *****************************************************************************/
 
-#ifndef __CAnimBlendAssocGroupSA_H
-#define __CAnimBlendAssocGroupSA_H
+#pragma once
 
 #include <game/CAnimBlendAssocGroup.h>
 #include "CAnimBlendStaticAssociationSA.h"
 #include "Common.h"
 
 #define FUNC_CAnimBlendAssocGroup_InitEmptyAssociations 0x4cdfb0
+#define FUNC_CAnimBlendAssocGroup_CopyAnimation         0x4ce130
 #define FUNC_CAnimBlendAssocGroup_IsCreated             0x4d37a0
 #define FUNC_CAnimBlendAssocGroup_GetNumAnimations      0x45b050
 #define FUNC_CAnimBlendAssocGroup_GetAnimBlock          0x45b060
@@ -26,6 +26,17 @@
 class CAnimBlockSA;
 class CAnimBlockSAInterface;
 class CAnimManagerSA;
+
+class CAnimationStyleDescriptorSAInterface
+{
+public:
+    char groupName[16];
+    char blockName[16];
+    int field_20;
+    int animsCount;
+    void *animNames;
+    void *animDesc;
+};
 
 class CAnimBlendAssocGroupSAInterface
 {
@@ -44,21 +55,23 @@ class CAnimBlendAssocGroupSA : public CAnimBlendAssocGroup
 public:
     CAnimBlendAssocGroupSA(CAnimBlendAssocGroupSAInterface* pInterface);
 
-    void                         InitEmptyAssociations(RpClump* pClump);
-    bool                         IsCreated(void);
-    int                          GetNumAnimations(void);
-    CAnimBlock*                  GetAnimBlock(void);
-    CAnimBlendStaticAssociation* GetAnimation(unsigned int ID);
-    void                         CreateAssociations(const char* szBlockName);
+    CAnimBlendAssociationSAInterface* CopyAnimation(unsigned int AnimID);
+    void                              InitEmptyAssociations(RpClump* pClump);
+    bool                              IsCreated();
+    int                               GetNumAnimations();
+    CAnimBlock*                       GetAnimBlock();
+    CAnimBlendStaticAssociation*      GetAnimation(unsigned int ID);
+    eAnimGroup                        GetGroupID();
+    void                              CreateAssociations(const char* szBlockName);
 
-    bool IsLoaded(void);
+    bool IsLoaded();
     void SetIDOffset(int iOffset) { m_pInterface->iIDOffset = iOffset; }
 
+    CAnimBlendAssocGroupSAInterface*  GetInterface() { return m_pInterface; }
+
 protected:
-    void SetupAnimBlock(void);
+    void SetupAnimBlock();
 
     CAnimBlendAssocGroupSAInterface* m_pInterface;
     CAnimBlockSA*                    m_pAnimBlock;
 };
-
-#endif

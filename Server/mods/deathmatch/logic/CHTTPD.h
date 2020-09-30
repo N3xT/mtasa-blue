@@ -11,8 +11,7 @@
 
 // This class implements the webserver, it uses EHS to do this
 
-#ifndef CHTTPD_H
-#define CHTTPD_H
+#pragma once
 
 #include <string>
 #include <list>
@@ -22,19 +21,19 @@
 class CHTTPD : public EHS
 {
 public:
-    CHTTPD(void);            // start the initial server
+    CHTTPD();            // start the initial server
     ~CHTTPD();
     // EHS interface
     HttpResponse* RouteRequest(HttpRequest* ipoHttpRequest);
     ResponseCode  HandleRequest(HttpRequest* ipoHttpRequest, HttpResponse* ipoHttpResponse);
-    void          HttpPulse(void);
+    void          HttpPulse();
     bool          ShouldAllowConnection(const char* szAddress);
 
     // CHTTPD methods
     bool            StartHTTPD(const char* szIP, unsigned int port);
-    bool            StopHTTPD(void);
+    bool            StopHTTPD();
     void            SetResource(CResource* resource) { m_resource = resource; }
-    CResource*      GetResource(void) { return m_resource; }
+    CResource*      GetResource() { return m_resource; }
     class CAccount* CheckAuthentication(HttpRequest* ipoHttpRequest);
     void            SetDefaultResource(const char* szResourceName) { m_strDefaultResourceName = szResourceName ? szResourceName : ""; }
     ResponseCode    RequestLogin(HttpRequest* ipoHttpRequest, HttpResponse* ipoHttpResponse);
@@ -58,5 +57,3 @@ private:
     SString                m_strWarnMessageForIp;
     CElapsedTime           m_WarnMessageTimer;
 };
-
-#endif

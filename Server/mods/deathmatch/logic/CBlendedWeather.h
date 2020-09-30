@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CBLENDEDWEATHER_H
-#define __CBLENDEDWEATHER_H
+#pragma once
 
 #include "CClock.h"
 
@@ -19,16 +18,18 @@ class CBlendedWeather
 public:
     CBlendedWeather(CClock* pClock);
 
+    void DoPulse();
+
     void SetWeather(unsigned char ucWeather);
     void SetWeatherBlended(unsigned char ucWeather, unsigned char ucHour);
 
-    unsigned char GetWeather(void);
-    unsigned char GetWeatherBlendingTo(void) { return m_ucSecondaryBlendedWeather; };
-    unsigned char GetBlendedStartHour(void) { return m_ucBlendStartHour; };
-    unsigned char GetBlendedStopHour(void) { return m_ucBlendStopHour; };
+    unsigned char GetWeather();
+    unsigned char GetWeatherBlendingTo() { return m_ucSecondaryBlendedWeather; };
+    unsigned char GetBlendedStartHour() { return m_ucBlendStartHour; };
+    unsigned char GetBlendedStopHour() { return m_ucBlendStopHour; };
 
 private:
-    void Update(void);
+    void Update();
 
     unsigned char m_ucPrimaryWeather;
     unsigned char m_ucSecondaryWeather;
@@ -40,5 +41,3 @@ private:
 
     CClock* m_pClock;
 };
-
-#endif

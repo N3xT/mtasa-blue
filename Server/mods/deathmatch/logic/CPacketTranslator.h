@@ -11,8 +11,7 @@
 
 class CPacketTranslator;
 
-#ifndef __CPACKETTRANSLATOR_H
-#define __CPACKETTRANSLATOR_H
+#pragma once
 
 #include "CCommon.h"
 #include "CPlayerManager.h"
@@ -25,12 +24,10 @@ class CPacketTranslator
 {
 public:
     CPacketTranslator(CPlayerManager* pPlayerManager);
-    ~CPacketTranslator(void);
+    ~CPacketTranslator();
 
     CPacket* Translate(const NetServerPlayerID& Socket, ePacketID PacketID, NetBitStreamInterface& BitStream, SNetExtraInfo* pNetExtraInfo);
 
 private:
     CPlayerManager* m_pPlayerManager;
 };
-
-#endif

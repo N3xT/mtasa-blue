@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef CRESOURCECLIENTSCRIPTITEM_H
-#define CRESOURCECLIENTSCRIPTITEM_H
+#pragma once
 
 #include "CResourceFile.h"
 
@@ -18,10 +17,10 @@ class CResourceClientScriptItem : public CResourceFile
 {
 public:
     CResourceClientScriptItem(class CResource* resource, const char* szShortName, const char* szResourceFileName, CXMLAttributes* xmlAttributes);
-    ~CResourceClientScriptItem(void);
+    ~CResourceClientScriptItem();
 
-    bool Start(void);
-    bool Stop(void);
+    bool Start();
+    bool Stop();
 
     bool           IsNoClientCache() const { return m_bIsNoClientCache; }
     const SString& GetSourceCode() const { return m_sourceCode; }
@@ -32,5 +31,3 @@ private:
     bool    m_bIsNoClientCache;
     SString m_sourceCode;
 };
-
-#endif

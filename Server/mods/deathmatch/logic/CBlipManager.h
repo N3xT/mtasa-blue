@@ -11,8 +11,7 @@
 
 class CBlipManager;
 
-#ifndef __CBLIPMANAGER_H
-#define __CBLIPMANAGER_H
+#pragma once
 
 #include "CBlip.h"
 #include <list>
@@ -22,23 +21,21 @@ class CBlipManager
     friend class CBlip;
 
 public:
-    CBlipManager(void);
-    ~CBlipManager(void) { DeleteAll(); };
+    CBlipManager();
+    ~CBlipManager() { DeleteAll(); };
 
-    CBlip* Create(CElement* pParent, CXMLNode* pNode = NULL);
+    CBlip* Create(CElement* pParent);
     CBlip* CreateFromXML(CElement* pParent, CXMLNode& Node, CEvents* pEvents);
-    void   DeleteAll(void);
+    void   DeleteAll();
 
-    unsigned int Count(void) { return static_cast<unsigned int>(m_List.size()); };
+    unsigned int Count() { return static_cast<unsigned int>(m_List.size()); };
     bool         Exists(CBlip* pBlip);
 
-    list<CBlip*>::const_iterator IterBegin(void) { return m_List.begin(); };
-    list<CBlip*>::const_iterator IterEnd(void) { return m_List.end(); };
+    list<CBlip*>::const_iterator IterBegin() { return m_List.begin(); };
+    list<CBlip*>::const_iterator IterEnd() { return m_List.end(); };
 
     static bool IsValidIcon(unsigned long ulIcon) { return ulIcon <= 63; };
 
 private:
     list<CBlip*> m_List;
 };
-
-#endif

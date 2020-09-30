@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CLUAEVENTPACKET_H
-#define __PACKETS_CLUAEVENTPACKET_H
+#pragma once
 
 #include "CPacket.h"
 #include "../lua/CLuaArguments.h"
@@ -18,18 +17,18 @@
 class CLuaEventPacket : public CPacket
 {
 public:
-    CLuaEventPacket(void);
+    CLuaEventPacket();
     CLuaEventPacket(const char* szName, ElementID ID, CLuaArguments* pArguments);
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_LUA_EVENT; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_LUA_EVENT; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Read(NetBitStreamInterface& BitStream);
     bool Write(NetBitStreamInterface& BitStream) const;
 
-    const char*    GetName(void) { return m_strName; }
-    ElementID      GetElementID(void) { return m_ElementID; }
-    CLuaArguments* GetArguments(void) { return m_pArguments; }
+    const char*    GetName() { return m_strName; }
+    ElementID      GetElementID() { return m_ElementID; }
+    CLuaArguments* GetArguments() { return m_pArguments; }
 
 private:
     SString        m_strName;
@@ -37,5 +36,3 @@ private:
     CLuaArguments  m_ArgumentsStore;
     CLuaArguments* m_pArguments;
 };
-
-#endif

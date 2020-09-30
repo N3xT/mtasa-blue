@@ -30,10 +30,6 @@ extern IDirectInput8* g_pDirectInput8;
 #define VALID_INDEX_FOR( array, index ) \
             ( index >= 0 && index < NUMELMS(array) )
 
-#define ZERO_ON_NEW \
-    void* operator new ( size_t size )              { void* ptr = ::operator new(size); memset(ptr,0,size); return ptr; } \
-    void* operator new ( size_t size, void* where ) { memset(where,0,size); return where; }
-
 SString GUIDToString(const GUID& g)
 {
     return SString("%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", g.Data1, g.Data2, g.Data3, g.Data4[0], g.Data4[1], g.Data4[2], g.Data4[3], g.Data4[4],
@@ -62,6 +58,7 @@ enum eDir
 {
     eDirNeg,
     eDirPos,
+    eDirNegToPos,
     eDirMax
 };
 
@@ -79,7 +76,7 @@ enum eStick
 struct SMappingLine
 {
     eJoy   SourceAxisIndex;            // 0 - 7
-    eDir   SourceAxisDir;              // 0 - 1
+    eDir   SourceAxisDir;              // 0 - 2
     eStick OutputAxisIndex;            // 0/1 2/3 4 5
     eDir   OutputAxisDir;              // 0 - 1
     bool   bEnabled;
@@ -131,35 +128,35 @@ class CJoystickManager : public CJoystickManagerInterface
 {
 public:
     ZERO_ON_NEW
-    CJoystickManager(void);
-    ~CJoystickManager(void);
+    CJoystickManager();
+    ~CJoystickManager();
 
     // CJoystickManagerInterface methods
     virtual void OnSetDataFormat(IDirectInputDevice8A* pDevice, LPCDIDATAFORMAT a) {}
     virtual void RemoveDevice(IDirectInputDevice8A* pDevice);
-    virtual void DoPulse(void);
+    virtual void DoPulse();
     virtual void ApplyAxes(CControllerState& cs, bool bInVehicle);
 
     // Status
-    virtual bool IsJoypadConnected(void);
+    virtual bool IsJoypadConnected();
 
     // Settings
-    virtual string GetControllerName(void);
-    virtual int    GetDeadZone(void);
-    virtual int    GetSaturation(void);
+    virtual string GetControllerName();
+    virtual int    GetDeadZone();
+    virtual int    GetSaturation();
     virtual void   SetDeadZone(int iDeadZone);
     virtual void   SetSaturation(int iSaturation);
-    virtual int    GetSettingsRevision(void);
-    virtual void   SetDefaults(void);
-    virtual bool   SaveToXML(void);
+    virtual int    GetSettingsRevision();
+    virtual void   SetDefaults();
+    virtual bool   SaveToXML();
 
     // Binding
-    virtual int    GetOutputCount(void);
+    virtual int    GetOutputCount();
     virtual string GetOutputName(int iOutputIndex);
     virtual string GetOutputInputName(int iOutputIndex);
     virtual bool   BindNextUsedAxisToOutput(int iOutputIndex);
-    virtual bool   IsAxisBindComplete(void);
-    virtual bool   IsCapturingAxis(void);
+    virtual bool   IsAxisBindComplete();
+    virtual bool   IsCapturingAxis();
     virtual void   CancelCaptureAxis(bool bClearBinding);
 
     // CJoystickManager methods
@@ -169,13 +166,13 @@ public:
 private:
     bool      ReadInputSubsystem(DIJOYSTATE2& js);
     bool      HandleXInputGetState(XINPUT_STATE& XInputState);
-    bool      IsXInputDeviceAttached(void);
-    bool      IsJoypadValid(void);
-    void      EnumAxes(void);
-    void      InitDirectInput(void);
-    void      ReadCurrentState(void);
+    bool      IsXInputDeviceAttached();
+    bool      IsJoypadValid();
+    void      EnumAxes();
+    void      InitDirectInput();
+    void      ReadCurrentState();
     CXMLNode* GetConfigNode(bool bCreateIfRequired);
-    bool      LoadFromXML(void);
+    bool      LoadFromXML();
 
     bool             m_bDoneInit;
     int              m_SettingsRevision;
@@ -203,7 +200,7 @@ private:
 // CJoystickManager instantiation
 //
 ///////////////////////////////////////////////////////////////
-CJoystickManagerInterface* NewJoystickManager(void)
+CJoystickManagerInterface* NewJoystickManager()
 {
     return new CJoystickManager();
 }
@@ -211,7 +208,7 @@ CJoystickManagerInterface* NewJoystickManager(void)
 // This is nice so there
 CJoystickManagerInterface* g_pJoystickManager = NULL;
 
-CJoystickManagerInterface* GetJoystickManager(void)
+CJoystickManagerInterface* GetJoystickManager()
 {
     if (!g_pJoystickManager)
         g_pJoystickManager = NewJoystickManager();
@@ -223,7 +220,7 @@ CJoystickManagerInterface* GetJoystickManager(void)
 // CJoystickManager implementation
 //
 ///////////////////////////////////////////////////////////////
-CJoystickManager::CJoystickManager(void)
+CJoystickManager::CJoystickManager()
 {
     m_iAutoDeadZoneCounter = 20;
     m_bAutoDeadZoneEnabled = true;
@@ -246,7 +243,7 @@ CJoystickManager::CJoystickManager(void)
     SetDefaults();
 }
 
-CJoystickManager::~CJoystickManager(void)
+CJoystickManager::~CJoystickManager()
 {
 }
 
@@ -363,36 +360,44 @@ BOOL CJoystickManager::DoEnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdido
         int axisIndex = -1;
 
         if (pdidoi->guidType == GUID_XAxis)
-            axisIndex = 0;
+            axisIndex = eJoyX;
         if (pdidoi->guidType == GUID_YAxis)
-            axisIndex = 1;
+            axisIndex = eJoyY;
         if (pdidoi->guidType == GUID_ZAxis)
-            axisIndex = 2;
+            axisIndex = eJoyZ;
         if (pdidoi->guidType == GUID_RxAxis)
-            axisIndex = 3;
+            axisIndex = eJoyRx;
         if (pdidoi->guidType == GUID_RyAxis)
-            axisIndex = 4;
+            axisIndex = eJoyRy;
         if (pdidoi->guidType == GUID_RzAxis)
-            axisIndex = 5;
+            axisIndex = eJoyRz;
         if (pdidoi->guidType == GUID_Slider)
-            axisIndex = 6;
+            axisIndex = eJoyS1;
 
+        SString strStatus;
         // Save the range and the axis index
         if (axisIndex >= 0 && axisIndex < NUMELMS(m_DevInfo.axis) && range.lMin < range.lMax)
         {
-            m_DevInfo.axis[axisIndex].lMin = range.lMin;
-            m_DevInfo.axis[axisIndex].lMax = range.lMax;
-            m_DevInfo.axis[axisIndex].bEnabled = true;
-            m_DevInfo.axis[axisIndex].dwType = pdidoi->dwType;
+            if (!m_DevInfo.axis[axisIndex].bEnabled)
+            {
+                m_DevInfo.axis[axisIndex].lMin = range.lMin;
+                m_DevInfo.axis[axisIndex].lMax = range.lMax;
+                m_DevInfo.axis[axisIndex].bEnabled = true;
+                m_DevInfo.axis[axisIndex].dwType = pdidoi->dwType;
 
-            m_DevInfo.iAxisCount++;
-            WriteDebugEvent(
-                SString("                    Added axis index %d. lMin:%d lMax:%d (iAxisCount:%d)", axisIndex, range.lMin, range.lMax, m_DevInfo.iAxisCount));
+                m_DevInfo.iAxisCount++;
+                strStatus = SString("Added axis index %d. lMin:%d lMax:%d (iAxisCount:%d)", axisIndex, range.lMin, range.lMax, m_DevInfo.iAxisCount);
+            }
+            else
+            {
+                strStatus = SString("Ignoring duplicate axis index %d", axisIndex);
+            }
         }
         else
         {
-            WriteDebugEvent(SStringX("                 Failed to recognise axis"));
+            strStatus = "Failed to recognise axis";
         }
+        WriteDebugEvent("                    " + strStatus);
 
 #ifdef MTA_DEBUG
 #if 0
@@ -422,7 +427,7 @@ BOOL CJoystickManager::DoEnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdido
 // Starts the enumeration of the joystick axes.
 //
 ///////////////////////////////////////////////////////////////
-void CJoystickManager::EnumAxes(void)
+void CJoystickManager::EnumAxes()
 {
     if (!m_DevInfo.pDevice)
         return;
@@ -459,7 +464,7 @@ void CJoystickManager::EnumAxes(void)
 // Create a joystick device if possible
 //
 ///////////////////////////////////////////////////////////////
-void CJoystickManager::InitDirectInput(void)
+void CJoystickManager::InitDirectInput()
 {
     if (m_bUseXInput)
         return;
@@ -525,7 +530,7 @@ void CJoystickManager::InitDirectInput(void)
 // buttons state changes.
 //
 ///////////////////////////////////////////////////////////////
-void CJoystickManager::DoPulse(void)
+void CJoystickManager::DoPulse()
 {
     if (!m_bDoneInit)
     {
@@ -644,6 +649,7 @@ void CJoystickManager::DoPulse(void)
         // See if any axes have changed to over 0.75
         for (int i = 0; i < NUMELMS(m_JoystickState.rgfAxis); i++)
         {
+            // Half axis movement (0 to 1)
             if (fabs(m_JoystickState.rgfAxis[i]) > 0.75f)
                 if (fabs(m_PreBindJoystickState.rgfAxis[i]) < 0.75f)
                 {
@@ -652,6 +658,18 @@ void CJoystickManager::DoPulse(void)
                     m_currentMapping[m_iCaptureOutputIndex].bEnabled = true;
                     m_currentMapping[m_iCaptureOutputIndex].SourceAxisIndex = (eJoy)i;
                     m_currentMapping[m_iCaptureOutputIndex].SourceAxisDir = m_JoystickState.rgfAxis[i] < 0.f ? eDirNeg : eDirPos;
+                    m_SettingsRevision++;
+                }
+
+            // Full axis movement (-1 to 1)
+            if (m_JoystickState.rgfAxis[i] > 0.75f)
+                if (m_PreBindJoystickState.rgfAxis[i] < -0.75f)
+                {
+                    m_bCaptureAxis = false;
+                    // Save the mapping
+                    m_currentMapping[m_iCaptureOutputIndex].bEnabled = true;
+                    m_currentMapping[m_iCaptureOutputIndex].SourceAxisIndex = (eJoy)i;
+                    m_currentMapping[m_iCaptureOutputIndex].SourceAxisDir = eDirNegToPos;
                     m_SettingsRevision++;
                 }
         }
@@ -665,7 +683,7 @@ void CJoystickManager::DoPulse(void)
 // Puts current state of the joystick into m_JoystickState.
 //
 ///////////////////////////////////////////////////////////////
-void CJoystickManager::ReadCurrentState(void)
+void CJoystickManager::ReadCurrentState()
 {
     // Clear current state
     for (int i = 0; i < NUMELMS(m_JoystickState.rgfAxis); i++)
@@ -936,7 +954,7 @@ bool CJoystickManager::HandleXInputGetState(XINPUT_STATE& XInputState)
 // Also attempts reattach if required
 //
 ///////////////////////////////////////////////////////////////
-bool CJoystickManager::IsXInputDeviceAttached(void)
+bool CJoystickManager::IsXInputDeviceAttached()
 {
     if (!m_bXInputDeviceAttached)
     {
@@ -1028,8 +1046,10 @@ void CJoystickManager::ApplyAxes(CControllerState& cs, bool bInVehicle)
 
         if (line.SourceAxisDir == eDirPos)
             value = std::max(0.f, value);
-        else
+        else if (line.SourceAxisDir == eDirNeg)
             value = -std::min(0.f, value);
+        else if (line.SourceAxisDir == eDirNegToPos)
+            value = value * 0.5f + 0.5f;
 
         if (line.OutputAxisDir == eDirNeg)
             value = -value;
@@ -1143,7 +1163,7 @@ void CJoystickManager::ApplyAxes(CControllerState& cs, bool bInVehicle)
 //
 ///////////////////////////////////////////////////////////////
 
-bool CJoystickManager::IsJoypadConnected(void)
+bool CJoystickManager::IsJoypadConnected()
 {
     if (m_bUseXInput)
         return IsXInputDeviceAttached();
@@ -1156,17 +1176,17 @@ bool CJoystickManager::IsJoypadConnected(void)
 //
 ///////////////////////////////////////////////////////////////
 
-string CJoystickManager::GetControllerName(void)
+string CJoystickManager::GetControllerName()
 {
     return m_DevInfo.strProductName;
 }
 
-int CJoystickManager::GetDeadZone(void)
+int CJoystickManager::GetDeadZone()
 {
     return m_DevInfo.iDeadZone;
 }
 
-int CJoystickManager::GetSaturation(void)
+int CJoystickManager::GetSaturation()
 {
     return m_DevInfo.iSaturation;
 }
@@ -1185,12 +1205,12 @@ void CJoystickManager::SetSaturation(int iSaturation)
     m_DevInfo.iSaturation = Clamp(51, iSaturation, 100);
 }
 
-int CJoystickManager::GetSettingsRevision(void)
+int CJoystickManager::GetSettingsRevision()
 {
     return m_SettingsRevision;
 }
 
-bool CJoystickManager::IsJoypadValid(void)
+bool CJoystickManager::IsJoypadValid()
 {
     if (m_bUseXInput)
         return IsXInputDeviceAttached();
@@ -1274,7 +1294,7 @@ CXMLNode* CJoystickManager::GetConfigNode(bool bCreateIfRequired)
 // Set the default axes mapping for the current joypad.
 //
 ///////////////////////////////////////////////////////////////
-void CJoystickManager::SetDefaults(void)
+void CJoystickManager::SetDefaults()
 {
     m_SettingsRevision++;
 
@@ -1340,7 +1360,7 @@ void CJoystickManager::SetDefaults(void)
 // Load axes mapping for the current joypad.
 //
 ///////////////////////////////////////////////////////////////
-bool CJoystickManager::LoadFromXML(void)
+bool CJoystickManager::LoadFromXML()
 {
     m_SettingsRevision++;
 
@@ -1438,7 +1458,7 @@ bool CJoystickManager::LoadFromXML(void)
 // Save axes mapping for the current joypad.
 //
 ///////////////////////////////////////////////////////////////
-bool CJoystickManager::SaveToXML(void)
+bool CJoystickManager::SaveToXML()
 {
     if (!IsJoypadValid())
         return false;
@@ -1567,6 +1587,8 @@ static string ToString(eDir value)
         return "-";
     if (value == eDirPos)
         return "+";
+    if (value == eDirNegToPos)
+        return " ";
     return "unknown";
 }
 
@@ -1664,7 +1686,7 @@ bool CJoystickManager::BindNextUsedAxisToOutput(int iOutputIndex)
 // Axis capture.
 //
 ///////////////////////////////////////////////////////////////
-bool CJoystickManager::IsAxisBindComplete(void)
+bool CJoystickManager::IsAxisBindComplete()
 {
     return !m_bCaptureAxis;
 }
@@ -1676,7 +1698,7 @@ bool CJoystickManager::IsAxisBindComplete(void)
 // Axis capture.
 //
 ///////////////////////////////////////////////////////////////
-bool CJoystickManager::IsCapturingAxis(void)
+bool CJoystickManager::IsCapturingAxis()
 {
     return m_bCaptureAxis;
 }

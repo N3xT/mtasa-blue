@@ -11,18 +11,17 @@
 
 class CHandlingManager;
 
-#ifndef __CHANDLINGMANAGER_H
-#define __CHANDLINGMANAGER_H
+#pragma once
 
 #include "CHandlingEntry.h"
 
 class CHandlingManager
 {
 public:
-    CHandlingManager(void);
-    ~CHandlingManager(void);
+    CHandlingManager();
+    ~CHandlingManager();
 
-    CHandlingEntry* CreateHandlingData(void);
+    CHandlingEntry* CreateHandlingData();
 
     bool ApplyHandlingData(eVehicleTypes eModel, CHandlingEntry* pEntry);
 
@@ -39,7 +38,7 @@ public:
     std::map<std::string, eHandlingProperty> m_HandlingNames;
 
 private:
-    void InitializeDefaultHandlings(void);
+    void InitializeDefaultHandlings();
 
     // Original handling data unaffected by handling.cfg changes
     static SFixedArray<tHandlingData, HT_MAX> m_OriginalHandlingData;
@@ -52,5 +51,3 @@ private:
 
     SFixedArray<bool, HT_MAX> m_bModelHandlingChanged;
 };
-
-#endif

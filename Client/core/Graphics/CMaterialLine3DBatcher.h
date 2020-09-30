@@ -32,18 +32,19 @@ class CMaterialLine3DBatcher
 {
 public:
     ZERO_ON_NEW
-    CMaterialLine3DBatcher(void);
-    ~CMaterialLine3DBatcher(void);
+    CMaterialLine3DBatcher(bool bPreGUI);
+    ~CMaterialLine3DBatcher();
 
     void OnDeviceCreate(IDirect3DDevice9* pDevice, float fViewportSizeX, float fViewportSizeY);
-    void Flush(void);
-    bool HasItems(void) { return !m_LineList.empty(); }
+    void Flush();
+    bool HasItems() { return !m_LineList.empty(); }
     void AddLine3D(const CVector& vecFrom, const CVector& vecTo, float fWidth, ulong ulColor, CMaterialItem* pMaterial, float fU, float fV, float fSizeU,
                    float fSizeV, bool bRelativeUV, bool bUseFaceToward, const CVector& vecFaceToward);
 
 protected:
     void DrawBatch(const CVector& vecCameraPos, uint* pBatchIndices, uint uiNumBatchLines, CMaterialItem* pMaterial);
 
+    bool                             m_bPreGUI;
     IDirect3DDevice9*                m_pDevice;
     std::vector<SMaterialLine3DItem> m_LineList;
     static SMaterialLine3DItem*      ms_pLines;            // Used in sort callback

@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __NS_PLAYERID_H
-#define __NS_PLAYERID_H
+#pragma once
 
 #include <MTAPlatform.h>
 
@@ -19,11 +18,11 @@ class SNetExtraInfo : public CRefCountable
 protected:
     SNetExtraInfo(const SNetExtraInfo&);
     const SNetExtraInfo& operator=(const SNetExtraInfo&);
-    ~SNetExtraInfo(void) {}
+    ~SNetExtraInfo() {}
 
 public:
     ZERO_ON_NEW
-    SNetExtraInfo(void) {}
+    SNetExtraInfo() {}
 
     bool m_bHasPing;
     uint m_uiPing;
@@ -36,7 +35,7 @@ protected:
     unsigned short m_usPort;
 
 public:
-    NetServerPlayerID(void)
+    NetServerPlayerID()
     {
         m_uiBinaryAddress = 0xFFFFFFFF;
         m_usPort = 0xFFFF;
@@ -48,7 +47,7 @@ public:
         m_usPort = usPort;
     };
 
-    ~NetServerPlayerID(void){};
+    ~NetServerPlayerID(){};
 
     friend inline int operator==(const NetServerPlayerID& left, const NetServerPlayerID& right)
     {
@@ -65,8 +64,6 @@ public:
         return left.m_uiBinaryAddress < right.m_uiBinaryAddress || (left.m_uiBinaryAddress == right.m_uiBinaryAddress && left.m_usPort < right.m_usPort);
     }
 
-    unsigned long  GetBinaryAddress(void) const { return m_uiBinaryAddress; };
-    unsigned short GetPort(void) const { return m_usPort; };
+    unsigned long  GetBinaryAddress() const { return m_uiBinaryAddress; };
+    unsigned short GetPort() const { return m_usPort; };
 };
-
-#endif

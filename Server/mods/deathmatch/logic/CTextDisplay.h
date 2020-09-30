@@ -11,8 +11,7 @@
 
 class CTextDisplay;
 
-#ifndef __CTEXTDISPLAY_H
-#define __CTEXTDISPLAY_H
+#pragma once
 
 #include <list>
 #include "CPlayer.h"
@@ -21,8 +20,8 @@ class CTextDisplay;
 class CTextDisplay
 {
 public:
-    CTextDisplay(void);
-    ~CTextDisplay(void);
+    CTextDisplay();
+    ~CTextDisplay();
 
     void AddObserver(CPlayer* pPlayer);
     void RemoveObserver(CPlayer* pPlayer);
@@ -34,12 +33,10 @@ public:
 
     void Add(CTextItem* pTextItem);
     void Remove(CTextItem* pTextItem, bool bRemoveFromList = true);
-    uint GetScriptID(void) { return m_uiScriptID; }
+    uint GetScriptID() { return m_uiScriptID; }
 
 private:
     std::list<CPlayerTextManager*> m_observers;
     std::list<CTextItem*>          m_contents;
     uint                           m_uiScriptID;
 };
-
-#endif

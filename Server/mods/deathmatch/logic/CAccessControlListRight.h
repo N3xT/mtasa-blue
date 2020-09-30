@@ -11,8 +11,7 @@
 
 class CAccessControlListRight;
 
-#ifndef __CACCESSCONTROLLISTRIGHT_H
-#define __CACCESSCONTROLLISTRIGHT_H
+#pragma once
 
 #define MAX_ACL_RIGHT_NAME_LENGTH 256
 
@@ -29,15 +28,15 @@ public:
 
 public:
     CAccessControlListRight(const char* szRightName, ERightType eRightType, bool bAccess, class CAccessControlListManager* pACLManager);
-    virtual ~CAccessControlListRight(void) { OnChange(); }
+    virtual ~CAccessControlListRight() { OnChange(); }
 
     void WriteToXMLNode(CXMLNode* pNode);
 
-    const char*  GetRightName(void) { return m_strRightName; };
-    unsigned int GetRightNameHash(void) { return m_uiNameHash; };
-    ERightType   GetRightType(void) { return m_eRightType; };
+    const char*  GetRightName() { return m_strRightName; };
+    unsigned int GetRightNameHash() { return m_uiNameHash; };
+    ERightType   GetRightType() { return m_eRightType; };
 
-    bool GetRightAccess(void) { return m_bAccess; };
+    bool GetRightAccess() { return m_bAccess; };
     void SetRightAccess(bool bAccess)
     {
         m_bAccess = bAccess;
@@ -48,7 +47,7 @@ public:
     SString GetAttributeValue(const SString& strAttributeName);
 
 private:
-    void OnChange(void);
+    void OnChange();
 
     SString                          m_strRightName;
     unsigned int                     m_uiNameHash;
@@ -57,5 +56,3 @@ private:
     class CAccessControlListManager* m_pACLManager;
     std::map<SString, SString>       m_ExtraAttributeMap;
 };
-
-#endif

@@ -11,8 +11,7 @@
 
 class CMarkerManager;
 
-#ifndef __CMarkerManager_H
-#define __CMarkerManager_H
+#pragma once
 
 #include "CColManager.h"
 #include "CMarker.h"
@@ -24,17 +23,17 @@ class CMarkerManager
 
 public:
     CMarkerManager(CColManager* pColManager);
-    ~CMarkerManager(void) { DeleteAll(); };
+    ~CMarkerManager() { DeleteAll(); };
 
-    CMarker* Create(CElement* pParent, CXMLNode* pNode = NULL);
+    CMarker* Create(CElement* pParent);
     CMarker* CreateFromXML(CElement* pParent, CXMLNode& Node, CEvents* pEvents);
-    void     DeleteAll(void);
+    void     DeleteAll();
 
-    unsigned int Count(void) { return static_cast<unsigned int>(m_Markers.size()); };
+    unsigned int Count() { return static_cast<unsigned int>(m_Markers.size()); };
     bool         Exists(CMarker* pMarker);
 
-    list<CMarker*>::const_iterator IterBegin(void) { return m_Markers.begin(); };
-    list<CMarker*>::const_iterator IterEnd(void) { return m_Markers.end(); };
+    list<CMarker*>::const_iterator IterBegin() { return m_Markers.begin(); };
+    list<CMarker*>::const_iterator IterEnd() { return m_Markers.end(); };
 
     static int           StringToType(const char* szString);
     static bool          TypeToString(unsigned int uiType, char* szString);
@@ -48,5 +47,3 @@ private:
     CColManager*   m_pColManager;
     list<CMarker*> m_Markers;
 };
-
-#endif

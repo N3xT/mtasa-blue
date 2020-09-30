@@ -17,13 +17,13 @@ VOID HOOK_CTask_Operator_Delete();
 
 CTaskSAInterface* pTempTaskInterface = 0;
 
-CTaskManagementSystemSA::CTaskManagementSystemSA(void)
+CTaskManagementSystemSA::CTaskManagementSystemSA()
 {
     // Install our hook used to delete our tasks when GTA does
     HookInstall(FUNC_CTask_Operator_Delete, (DWORD)HOOK_CTask_Operator_Delete, 6);
 }
 
-CTaskManagementSystemSA::~CTaskManagementSystemSA(void)
+CTaskManagementSystemSA::~CTaskManagementSystemSA()
 {
     // Delete all the entries
     list<STaskListItem*>::const_iterator iter = m_TaskList.begin();
@@ -242,8 +242,7 @@ CTask* CTaskManagementSystemSA::CreateAppropriateTask(CTaskSAInterface* pTaskInt
 }
 
 // HOOKS
-__declspec(noinline)
-void OnMY_Task_Operator_Delete(CTaskSAInterface* pTaskInterface)
+__declspec(noinline) void OnMY_Task_Operator_Delete(CTaskSAInterface* pTaskInterface)
 {
     ((CTaskManagementSystemSA*)(pGame->GetTaskManagementSystem()))->RemoveTask(pTempTaskInterface);
 }

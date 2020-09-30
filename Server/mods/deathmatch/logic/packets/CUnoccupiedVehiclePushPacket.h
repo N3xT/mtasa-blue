@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CUNOCCUPIEDVEHICLEPUSHSYNCPACKET_H
-#define __CUNOCCUPIEDVEHICLEPUSHSYNCPACKET_H
+#pragma once
 
 #include "CPacket.h"
 class CVehicle;
@@ -18,14 +17,12 @@ class CVehicle;
 class CUnoccupiedVehiclePushPacket : public CPacket
 {
 public:
-    CUnoccupiedVehiclePushPacket(void){};
+    CUnoccupiedVehiclePushPacket(){};
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_VEHICLE_PUSH_SYNC; };
-    unsigned long GetFlags(void) const { return 0; };            // Not used
+    ePacketID     GetPacketID() const { return PACKET_ID_VEHICLE_PUSH_SYNC; };
+    unsigned long GetFlags() const { return 0; };            // Not used
 
     bool Read(NetBitStreamInterface& BitStream);
 
     SUnoccupiedPushSync vehicle;
 };
-
-#endif

@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __PACKETS_CPLAYERJOINCOMPLETEPACKET_H
-#define __PACKETS_CPLAYERJOINCOMPLETEPACKET_H
+#pragma once
 
 #include "../CCommon.h"
 #include "CPacket.h"
@@ -19,13 +18,13 @@
 class CPlayerJoinCompletePacket : public CPacket
 {
 public:
-    CPlayerJoinCompletePacket(void);
+    CPlayerJoinCompletePacket();
     CPlayerJoinCompletePacket(ElementID PlayerID, unsigned char ucNumberOfPlayers, ElementID RootElementID, eHTTPDownloadType ucHTTPDownloadType,
                               unsigned short usHTTPDownloadPort, const char* szHTTPDownloadURL, int iHTTPMaxConnectionsPerClient, int iEnableClientChecks,
                               bool bVoiceEnabled, unsigned char ucSampleRate, unsigned char ucVoiceQuality, unsigned int uiBitrate);
 
-    ePacketID     GetPacketID(void) const { return PACKET_ID_SERVER_JOINEDGAME; };
-    unsigned long GetFlags(void) const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
+    ePacketID     GetPacketID() const { return PACKET_ID_SERVER_JOINEDGAME; };
+    unsigned long GetFlags() const { return PACKET_HIGH_PRIORITY | PACKET_RELIABLE | PACKET_SEQUENCED; };
 
     bool Write(NetBitStreamInterface& BitStream) const;
 
@@ -43,5 +42,3 @@ private:
     unsigned char     m_ucQuality;
     unsigned int      m_uiBitrate;
 };
-
-#endif

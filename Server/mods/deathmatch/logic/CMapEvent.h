@@ -9,8 +9,7 @@
  *
  *****************************************************************************/
 
-#ifndef __CMAPEVENT_H
-#define __CMAPEVENT_H
+#pragma once
 
 #define MAPEVENT_MAX_LENGTH_NAME 100
 
@@ -22,11 +21,11 @@ class CMapEvent
     friend class CMapEventManager;
 
 public:
-    class CLuaMain*        GetVM(void) { return m_pMain; };
-    const SString&         GetName(void) { return m_strName; };
-    const CLuaFunctionRef& GetLuaFunction(void) { return m_iLuaFunction; };
-    bool                   IsPropagated(void) { return m_bPropagated; }
-    bool                   IsBeingDestroyed(void) { return m_bBeingDestroyed; }
+    class CLuaMain*        GetVM() { return m_pMain; };
+    const SString&         GetName() { return m_strName; };
+    const CLuaFunctionRef& GetLuaFunction() { return m_iLuaFunction; };
+    bool                   IsPropagated() { return m_bPropagated; }
+    bool                   IsBeingDestroyed() { return m_bBeingDestroyed; }
 
     void Call(const class CLuaArguments& Arguments);
     bool IsHigherPriorityThan(const CMapEvent* pOther);
@@ -34,7 +33,7 @@ public:
 private:
     CMapEvent(class CLuaMain* pMain, const char* szName, const CLuaFunctionRef& iLuaFunction, bool bPropagated, EEventPriorityType eventPriority,
               float fPriorityMod);
-    ~CMapEvent(void);
+    ~CMapEvent();
 
     void SetBeingDestroyed(bool bBeingDestroyed) { m_bBeingDestroyed = bBeingDestroyed; }
 
@@ -47,5 +46,3 @@ private:
     EEventPriorityType m_eventPriority;
     float              m_fPriorityMod;
 };
-
-#endif

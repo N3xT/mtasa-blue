@@ -11,8 +11,7 @@
 
 class CWaterManager;
 
-#ifndef __CWaterManager_H
-#define __CWaterManager_H
+#pragma once
 
 class CWaterManager
 {
@@ -22,7 +21,7 @@ public:
     CWaterManager();
     ~CWaterManager();
 
-    CWater* Create(CWater::EWaterType waterType, CElement* pParent, CXMLNode* Node = NULL);
+    CWater* Create(CWater::EWaterType waterType, CElement* pParent, bool bShallow = false);
     CWater* CreateFromXML(CElement* pParent, CXMLNode& Node, CEvents* pEvents);
     void    DeleteAll();
 
@@ -34,7 +33,7 @@ public:
 
     const SWorldWaterLevelInfo& GetWorldWaterLevelInfo() const { return m_WorldWaterLevelInfo; }
     void                        SetWorldWaterLevel(float fLevel, bool bIncludeWorldNonSeaLevel);
-    void                        ResetWorldWaterLevel(void);
+    void                        ResetWorldWaterLevel();
     void                        SetElementWaterLevel(CWater* pWater, float fLevel);
     void                        SetAllElementWaterLevel(float fLevel);
 
@@ -50,5 +49,3 @@ protected:
     SWorldWaterLevelInfo m_WorldWaterLevelInfo;
     float                m_fGlobalWaveHeight;
 };
-
-#endif
